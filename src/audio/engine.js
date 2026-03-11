@@ -60,8 +60,7 @@ function createDistortionCurve(amount = 80) {
 
 export function sfxNav() {
   if (_muted) return;
-  const ctx = getCtx();
-  createOsc(ctx, 'square', 860, 1350, 0.07, 0.07);
+  createOsc(getCtx(), 'square', 860, 1350, 0.07, 0.07);
 }
 
 export function sfxBtn() {
@@ -89,8 +88,7 @@ export function sfxBtn() {
 
 export function sfxCard() {
   if (_muted) return;
-  const ctx = getCtx();
-  createOsc(ctx, 'sine', 1180, 780, 0.13, 0.055);
+  createOsc(getCtx(), 'sine', 1180, 780, 0.13, 0.055);
 }
 
 export function sfxClick() {
@@ -116,17 +114,13 @@ export function sfxTransmission() {
   const freqs = [420, 640, 860, 1080, 1720];
   [0, 0.1, 0.21, 0.34, 0.5].forEach((delay, i) => {
     const isLast = i === 4;
-    const type = isLast ? 'sine' : 'square';
-    const gainVal = isLast ? 0.17 : 0.11;
-    const dur = isLast ? 0.32 : 0.08;
-    createOsc(ctx, type, freqs[i], null, dur, gainVal, delay);
+    createOsc(ctx, isLast ? 'sine' : 'square', freqs[i], null, isLast ? 0.32 : 0.08, isLast ? 0.17 : 0.11, delay);
   });
 }
 
 export function sfxTyping() {
   if (_muted) return;
-  const ctx = getCtx();
-  createOsc(ctx, 'square', 780 + Math.random() * 420, null, 0.038, 0.035);
+  createOsc(getCtx(), 'square', 780 + Math.random() * 420, null, 0.038, 0.035);
 }
 
 export function sfxWhoosh() {
@@ -174,35 +168,30 @@ function getRobotVoice() {
   );
 }
 
-export function speakText(text) {
-  if (_muted || !window.speechSynthesis || !text) return;
-  window.speechSynthesis.cancel();
-
+/**
+ * Shared utterance factory — eliminates duplicated setup between speakText / speakWithCallbacks.
+ */
+function buildUtterance(text) {
   const utterance = new SpeechSynthesisUtterance(text);
   utterance.rate = 0.86;
   utterance.pitch = 0.5;
   utterance.volume = 0.92;
-
   const voice = getRobotVoice();
   if (voice) utterance.voice = voice;
+  return utterance;
+}
 
-  window.speechSynthesis.speak(utterance);
+export function speakText(text) {
+  if (_muted || !window.speechSynthesis || !text) return;
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(buildUtterance(text));
 }
 
 export function speakWithCallbacks(text, { onEnd, onError } = {}) {
   if (_muted || !window.speechSynthesis || !text) return;
   window.speechSynthesis.cancel();
-
-  const utterance = new SpeechSynthesisUtterance(text);
-  utterance.rate = 0.86;
-  utterance.pitch = 0.5;
-  utterance.volume = 0.92;
-
-  const voice = getRobotVoice();
-  if (voice) utterance.voice = voice;
-
+  const utterance = buildUtterance(text);
   if (onEnd) utterance.onend = onEnd;
   if (onError) utterance.onerror = onError;
-
   window.speechSynthesis.speak(utterance);
 }

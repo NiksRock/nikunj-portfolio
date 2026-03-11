@@ -1,4 +1,4 @@
-export const GLOBAL_CSS = `
+
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&display=swap');
 
   /* ─── Reset ─────────────────────────────────────────────── */
@@ -84,11 +84,7 @@ body {
   min-height: 100vh;
   min-height: -webkit-fill-available;
 }
-
-  input,
-  textarea {
-    font-size: 16px;
-  }
+ 
   .btn {
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
@@ -316,7 +312,7 @@ body {
     .proj-grid    { grid-template-columns: 1fr !important; }
     .contact-btns { flex-direction: column !important; align-items: stretch !important; }
     .contact-btns .btn { text-align: center !important; }
-    .bot-panel    { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 90px !important; height: 420px !important; }
+    .bot-panel    { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 90px !important;   }
     .bot-fab      { right: 16px !important; bottom: 20px !important; }
     .logger-toast { left: 16px !important; bottom: 90px !important; }
   }
@@ -324,4 +320,115 @@ body {
     .skills-cards { grid-template-columns: 1fr !important; }
     .hero-card-wrap > div { width: 160px !important; height: 240px !important; }
   }
-`;
+  /*
+  ─── PATCH: global.css changes ───────────────────────────────────────────────
+  Replace / merge these blocks into your existing src/styles/global.css
+  Only changed/added sections are listed below.
+  ────────────────────────────────────────────────────────────────────────────
+*/
+
+/* ─── FIX 3: Prevent iOS zoom on input focus ─────────────────────────────── */
+/* iOS Safari zooms in when an input's font-size < 16px.                      */
+/* This sets the visual font to 16px on mobile only so the UI doesn't zoom,   */
+/* then scales it back visually so it still LOOKS like 11px.                  */
+input,
+textarea {
+  font-size: 16px; /* already in your CSS — keep this, it prevents zoom globally */
+}
+
+/* Bot input specifically — override the 11px so iOS never zooms */
+.bot-input {
+  flex: 1;
+  background: rgba(2,4,8,.6);
+  border: 1px solid rgba(42,58,80,.5);
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 16px;        /* ← CHANGED from 11px — prevents iOS zoom */
+  padding: 9px 12px;
+  outline: none;
+  letter-spacing: 1px;
+}
+.bot-input::placeholder { color: var(--text-dim); font-size: 13px; }
+.bot-input:focus { border-color: var(--red); }
+
+
+/* ─── FIX 4: Desktop bot panel (unchanged) ───────────────────────────────── */
+.bot-input {
+  flex: 1;
+
+  background: rgba(2,4,8,.6);
+  border: 1px solid rgba(42,58,80,.5);
+
+  color: var(--text-primary);
+  font-family: 'Share Tech Mono', monospace;
+
+  font-size: 16px; /* Prevents iOS zoom */
+
+  padding: 9px 12px;
+  outline: none;
+  letter-spacing: 1px;
+}
+
+.bot-input::placeholder {
+  color: var(--text-dim);
+  font-size: 13px;
+}
+
+.bot-input:focus {
+  border-color: var(--red);
+}
+
+/* ─── FIX 2 + FIX 4: Mobile bot panel — full screen, readable ───────────── */
+@media (max-width: 768px) {
+
+  .bot-panel {
+    width: calc(100vw - 24px);
+    top: 64px;
+    bottom: 86px;
+    height: auto;
+    right: 12px;
+    left: 12px;
+  }
+
+  .bot-fab {
+    right: 16px;
+    bottom: 20px;
+  }
+
+  .msg {
+    font-size: 14px;
+    line-height: 1.65;
+    max-width: 95%;
+  }
+
+  .bot-send {
+    padding: 9px 20px;
+    font-size: 12px;
+  }
+
+  .logger-toast {
+    left: 16px;
+    bottom: 96px;
+  }
+}
+/* ─── FIX 4: Resume download button ─────────────────────────────────────── */
+/* Add this style so the resume button in Contact matches the site's design.  */
+.btn-resume {
+  background: transparent;
+  color: var(--gold);
+  border: 1px solid var(--gold);
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 2px;
+  padding: 10px 22px;
+  cursor: pointer;
+  clip-path: var(--clip-sm);
+  transition: background .2s, box-shadow .2s;
+  white-space: nowrap;
+  display: inline-block;
+  text-decoration: none;
+}
+.btn-resume:hover {
+  background: rgba(240,165,0,.1);
+  box-shadow: 0 0 18px rgba(240,165,0,.3);
+}

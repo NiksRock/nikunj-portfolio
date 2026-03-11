@@ -16,10 +16,8 @@ export function getBotResponse(input) {
   for (const [key, data] of Object.entries(BOT_KNOWLEDGE_BASE)) {
     if (key === 'fallback') continue;
 
-    const keywords = data.keywords ?? [];
     let score = 0;
-
-    for (const keyword of keywords) {
+    for (const keyword of (data.keywords ?? [])) {
       if (query.includes(keyword)) {
         score += keyword.split(' ').length;
       }
@@ -44,11 +42,4 @@ export function getBotResponse(input) {
     response: fallbacks[Math.floor(Math.random() * fallbacks.length)],
     isFallback: true,
   };
-}
-
-/**
- * @deprecated use getBotResponse's isFallback field instead
- */
-export function isFallbackResponse() {
-  return false;
 }

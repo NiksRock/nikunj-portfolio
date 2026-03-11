@@ -131,6 +131,7 @@ export function SectionHead({ sub, title }) {
 }
 
 // ─── SpeakText ────────────────────────────────────────────────────────────────
+// FIXED: clicking while active now STOPS speech instead of ignoring the click.
 export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   const { muted } = useSound();
   const [active, setActive] = useState(false);
@@ -139,10 +140,19 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   const handleClick = (e) => {
     e.stopPropagation();
     if (!text || muted) return;
+
+    // ── Already speaking → cancel and reset ──────────────────────────────────
+    if (active) {
+      window.speechSynthesis?.cancel();
+      setActive(false);
+      return;
+    }
+
+    // ── Start speaking ────────────────────────────────────────────────────────
     sfxClick();
     setActive(true);
     speakWithCallbacks(text, {
-      onEnd: () => setActive(false),
+      onEnd:   () => setActive(false),
       onError: () => setActive(false),
     });
   };
@@ -150,7 +160,7 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   return (
     <Tag
       onClick={handleClick}
-      title={muted ? '' : '🔊 Click to hear'}
+      title={muted ? '' : active ? '🔇 Click to stop' : '🔊 Click to hear'}
       style={{
         cursor: text && !muted ? 'pointer' : 'inherit',
         borderBottom: active ? '1px solid var(--cyan)' : '1px solid transparent',
@@ -162,10 +172,12 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
       {children}
       {active && (
         <span style={{
-          marginLeft: 5, fontSize: '0.7em',
+          marginLeft: 6, fontSize: '0.72em',
           color: 'var(--cyan)', animation: 'blink .55s infinite',
+          fontFamily: "'Share Tech Mono',monospace",
+          letterSpacing: 1,
         }}>
-          ▶
+          ■ STOP
         </span>
       )}
     </Tag>

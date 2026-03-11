@@ -1,9 +1,11 @@
-import { useState } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { sfxClick, sfxDeploy, sfxNav } from '../audio/engine';
 import { EDUCATION, EXPERIENCE } from '../data';
 import { Brackets, Reveal, SectionHead, SpeakText } from '../components/primitives';
 
-function ExperienceItem({ item, isOpen, onToggle }) {
+// ─── ExperienceItem ───────────────────────────────────────────────────────────
+
+const ExperienceItem = memo(function ExperienceItem({ item, isOpen, onToggle }) {
   return (
     <Reveal>
       <div
@@ -38,10 +40,7 @@ function ExperienceItem({ item, isOpen, onToggle }) {
 
           <div style={{ flex: 1 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 3 }}>
-              <span style={{
-                fontFamily: "'Rajdhani',sans-serif", fontWeight: 700,
-                fontSize: 17, color: 'var(--white)',
-              }}>
+              <span style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 17, color: 'var(--white)' }}>
                 {item.company}
               </span>
               <span style={{
@@ -51,11 +50,7 @@ function ExperienceItem({ item, isOpen, onToggle }) {
                 {item.tag}
               </span>
             </div>
-            {/* Improved: was var(--muted) — now text-body */}
-            <div style={{
-              fontFamily: "'Barlow',sans-serif",
-              fontSize: 13, color: 'var(--text-body)',
-            }}>
+            <div style={{ fontFamily: "'Barlow',sans-serif", fontSize: 13, color: 'var(--text-body)' }}>
               {item.role} &nbsp;·&nbsp; {item.period}
             </div>
           </div>
@@ -87,9 +82,7 @@ function ExperienceItem({ item, isOpen, onToggle }) {
                   className="kf"
                   style={{
                     fontFamily: "'Barlow',sans-serif",
-                    fontSize: 13.5,
-                    /* Improved: was rgba(232,240,255,.68) — now text-body for better contrast */
-                    color: 'var(--text-body)',
+                    fontSize: 13.5, color: 'var(--text-body)',
                     marginBottom: 10, lineHeight: 1.6,
                   }}
                 >
@@ -109,7 +102,6 @@ function ExperienceItem({ item, isOpen, onToggle }) {
                 {item.tech.map((tech) => (
                   <span key={tech} style={{
                     fontFamily: "'Share Tech Mono',monospace", fontSize: 10,
-                    /* Improved: was var(--white) on dark bg — slightly softer */
                     color: 'var(--text-primary)',
                     background: 'rgba(42,58,80,.35)',
                     border: '1px solid rgba(90,122,154,.4)',
@@ -125,9 +117,11 @@ function ExperienceItem({ item, isOpen, onToggle }) {
       </div>
     </Reveal>
   );
-}
+});
 
-function EducationCards() {
+// ─── EducationCards ───────────────────────────────────────────────────────────
+
+const EducationCards = memo(function EducationCards() {
   return (
     <Reveal delay={120}>
       <div style={{ marginTop: 48 }}>
@@ -145,22 +139,13 @@ function EducationCards() {
               style={{ padding: '18px 20px', border: `1px solid ${edu.color}28` }}
             >
               <Brackets color={edu.color} />
-              <div style={{
-                fontFamily: "'Rajdhani',sans-serif",
-                fontWeight: 700, fontSize: 22, color: edu.color, marginBottom: 5,
-              }}>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 22, color: edu.color, marginBottom: 5 }}>
                 {edu.degree}
               </div>
-              <SpeakText style={{
-                fontSize: 13.5, color: 'var(--text-primary)',
-                marginBottom: 4, display: 'block',
-              }}>
+              <SpeakText style={{ fontSize: 13.5, color: 'var(--text-primary)', marginBottom: 4, display: 'block' }}>
                 {edu.institute}
               </SpeakText>
-              <div style={{
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: 9, color: 'var(--muted-bright)', letterSpacing: 1,
-              }}>
+              <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--muted-bright)', letterSpacing: 1 }}>
                 {edu.university} &nbsp;·&nbsp; {edu.period}
               </div>
             </div>
@@ -169,17 +154,21 @@ function EducationCards() {
       </div>
     </Reveal>
   );
-}
+});
+
+// ─── Experience ───────────────────────────────────────────────────────────────
 
 export function Experience() {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const handleToggle = (index) => {
-    const next = openIndex === index ? -1 : index;
-    setOpenIndex(next);
-    if (next !== -1) sfxDeploy();
-    else sfxClick();
-  };
+  const handleToggle = useCallback((index) => {
+    setOpenIndex((prev) => {
+      const next = prev === index ? -1 : index;
+      if (next !== -1) sfxDeploy();
+      else sfxClick();
+      return next;
+    });
+  }, []);
 
   return (
     <section id="record">
@@ -198,16 +187,10 @@ export function Experience() {
           >
             <Brackets color="var(--red)" />
             <div>
-              <div style={{
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: 9, color: 'var(--gold)', letterSpacing: 3,
-              }}>
+              <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--gold)', letterSpacing: 3 }}>
                 DEPLOYMENT ENVIRONMENT
               </div>
-              <div style={{
-                fontFamily: "'Rajdhani',sans-serif",
-                fontWeight: 700, fontSize: 20, color: 'var(--white)',
-              }}>
+              <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 20, color: 'var(--white)' }}>
                 FRONTEND COMMAND // 7 YEARS ACTIVE DUTY // PUNE, INDIA
               </div>
             </div>

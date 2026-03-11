@@ -37,16 +37,46 @@ export function Contact() {
             scaling frontend teams, or building robust React ecosystems — let's deploy together.
           </SpeakText>
           <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--cyan)', letterSpacing: 1, marginBottom: 36 }}>
-            nikunjpatel1581996@gmail.com &nbsp;·&nbsp; +91 8980368059 &nbsp;·&nbsp; Pune, India
+            nikunjpatel1581996@gmail.com &nbsp;&middot;&nbsp; +91 8980368059 &nbsp;&middot;&nbsp; Pune, India
           </div>
         </Reveal>
 
-        {/* CTA buttons */}
+        {/* CTA buttons — resume download added as 4th button */}
         <Reveal delay={180}>
-          <div className="contact-btns" style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <MagBtn variant="red"   href="mailto:nikunjpatel1581996@gmail.com">✉ SEND TRANSMISSION</MagBtn>
+          <div className="contact-btns" style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
+            <MagBtn variant="red"   href="mailto:nikunjpatel1581996@gmail.com">SEND TRANSMISSION</MagBtn>
             <MagBtn variant="cyan"  href="https://github.com/NiksRock">GitHub // NiksRock</MagBtn>
             <MagBtn variant="ghost" href="https://linkedin.com/in/nikunj-patel-1aa949156">LinkedIn Profile</MagBtn>
+
+            {/* Resume — place PDF at public/resume.pdf */}
+            <a
+              href="/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
+              download="Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 8,
+                background: 'transparent',
+                color: '#f0a500',
+                border: '1px solid #f0a500',
+                fontFamily: "'Share Tech Mono',monospace",
+                fontSize: 11, letterSpacing: 2,
+                padding: '10px 22px',
+                cursor: 'pointer',
+                clipPath: 'polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)',
+                textDecoration: 'none',
+                transition: 'background .2s, box-shadow .2s',
+                whiteSpace: 'nowrap',
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(240,165,0,.1)';
+                e.currentTarget.style.boxShadow = '0 0 18px rgba(240,165,0,.35)';
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent';
+                e.currentTarget.style.boxShadow = 'none';
+              }}
+            >
+              DOWNLOAD RESUME
+            </a>
           </div>
         </Reveal>
 
@@ -55,12 +85,12 @@ export function Contact() {
           <div style={{ marginTop: 80, display: 'flex', alignItems: 'center', gap: 16 }}>
             <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,var(--red))' }} />
             <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--muted)', letterSpacing: 2 }}>
-              NP // SDE-3 // STAR HEALTH & ALLIED INSURANCE // PUNE
+              NP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
             </span>
             <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
           </div>
           <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'rgba(42,58,80,.4)', marginTop: 14, letterSpacing: 1 }}>
-            © 2025 NIKUNJ PATEL — ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
+            &copy; 2025 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
           </div>
         </Reveal>
       </div>

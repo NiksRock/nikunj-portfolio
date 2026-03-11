@@ -1,5 +1,5 @@
-import { createContext, useCallback, useContext, useState } from 'react';
-import { setMuted } from '../audio/engine';
+import { createContext, useCallback, useContext, useMemo, useState } from 'react';
+import { setMuted } from './engine';
 
 // ─── Context ──────────────────────────────────────────────────────────────────
 
@@ -18,9 +18,12 @@ export function SoundProvider({ children }) {
     });
   }, []);
 
+  // Memoize context value to prevent unnecessary re-renders of all consumers
+  const value = useMemo(() => ({ muted, toggle }), [muted, toggle]);
+
   return (
-    <SoundContext.Provider value={{ muted, toggle }}>
-      <div style={{ minHeight: '100vh' }}>{children}</div>
+    <SoundContext.Provider value={value}>
+      {children}
     </SoundContext.Provider>
   );
 }
