@@ -43,7 +43,7 @@ const SoundToggle = memo(function SoundToggle({ muted, onToggle }) {
 
 // ─── Nav link — isolated to prevent full nav re-render on hover ───────────────
 
-const NavLink = memo(function NavLink({ label, href }) {
+const NavLink = memo(function NavLink({ label, href,download=false }) {
   const handleMouseOver = useCallback((e) => {
     e.target.style.color = 'var(--white)';
     e.target.style.textShadow = '0 0 12px var(--red)';
@@ -57,6 +57,7 @@ const NavLink = memo(function NavLink({ label, href }) {
   return (
     <a
       href={href}
+      download={download}
       onMouseEnter={sfxBtn}
       onMouseOver={handleMouseOver}
       onMouseOut={handleMouseOut}
@@ -136,9 +137,10 @@ export const Nav = memo(function Nav({ scrollProgress }) {
           {NAV_LINKS.map(({ label, href }) => (
             <NavLink key={label} label={label} href={href} />
           ))}
+       <NavLink key={"CV"} label={"Agent File"} href={"/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"}  
+              download="Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"/>
           <SoundToggle muted={muted} onToggle={handleToggle} />
         </div>
-
         <MagBtn variant="red" href="#contact">DEPLOY ME</MagBtn>
       </nav>
     </>

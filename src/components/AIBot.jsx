@@ -9,12 +9,11 @@ import { BOT_QUICK_PROMPTS, SHEETS_WEBHOOK_URL } from '../data';
 
 const INITIAL_MESSAGE = {
   role: 'bot',
-  text: "Hey! I'm Nikunj's portfolio assistant. Ask me about his skills, experience, projects, or whether he's open to new opportunities.\n\nYou can also click any of my messages to hear them read aloud.",
+  text: "Hey! I'm Nikunj's portfolio assistant. Ask me about his skills, experience, projects, or whether he's open to new opportunities.\n\nClick any of my messages to hear them read aloud — click again to stop.",
 };
 
 const RESPONSE_DELAY_MIN = 400;
 const RESPONSE_DELAY_JITTER = 320;
-
 const TYPING_DELAYS = [0, 150, 300];
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
@@ -30,35 +29,23 @@ const BotHeader = memo(function BotHeader({ onClose }) {
     }}>
       <div style={{
         width: 8, height: 8, borderRadius: '50%',
-        background: '#00ff64',
-        boxShadow: '0 0 8px #00ff64',
+        background: '#00ff64', boxShadow: '0 0 8px #00ff64',
         animation: 'pulse-g 2s infinite',
       }} />
       <div style={{ flex: 1 }}>
-        <div style={{
-          fontFamily: "'Rajdhani',sans-serif",
-          fontWeight: 700, fontSize: 15,
-          color: 'var(--white)',
-        }}>
+        <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 15, color: 'var(--white)' }}>
           NEXUS-AI
         </div>
-        <div style={{
-          fontFamily: "'Share Tech Mono',monospace",
-          fontSize: 9, color: 'var(--red)', letterSpacing: 2,
-        }}>
+        <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--red)', letterSpacing: 2 }}>
           PORTFOLIO ASSISTANT // ONLINE
         </div>
       </div>
       <button
         onClick={onClose}
         style={{
-          background: 'none',
-          border: '1px solid rgba(255,70,85,.3)',
-          color: 'var(--red)',
-          width: 28, height: 28,
-          cursor: 'pointer',
-          fontFamily: "'Share Tech Mono',monospace",
-          fontSize: 12,
+          background: 'none', border: '1px solid rgba(255,70,85,.3)',
+          color: 'var(--red)', width: 28, height: 28, cursor: 'pointer',
+          fontFamily: "'Share Tech Mono',monospace", fontSize: 12,
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'background .2s',
         }}
@@ -73,10 +60,7 @@ const BotHeader = memo(function BotHeader({ onClose }) {
 
 const TypingIndicator = memo(function TypingIndicator() {
   return (
-    <div
-      className="msg msg-bot"
-      style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '14px 14px' }}
-    >
+    <div className="msg msg-bot" style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '14px 14px' }}>
       {TYPING_DELAYS.map((delay) => (
         <span key={delay} className="typing-dot" style={{ animationDelay: `${delay}ms` }} />
       ))}
@@ -87,27 +71,18 @@ const TypingIndicator = memo(function TypingIndicator() {
 const QuickPrompts = memo(function QuickPrompts({ onSelect }) {
   return (
     <div style={{
-      padding: '8px 14px 6px',
-      display: 'flex', flexWrap: 'wrap', gap: 6,
-      borderTop: '1px solid rgba(42,58,80,.3)',
-      flexShrink: 0,
+      padding: '8px 14px 6px', display: 'flex', flexWrap: 'wrap', gap: 6,
+      borderTop: '1px solid rgba(42,58,80,.3)', flexShrink: 0,
       background: 'rgba(2,6,14,.3)',
     }}>
       <div style={{
-        width: '100%',
-        fontFamily: "'Share Tech Mono',monospace",
-        fontSize: 8, color: 'var(--text-dim)', letterSpacing: 1.5,
-        marginBottom: 4,
+        width: '100%', fontFamily: "'Share Tech Mono',monospace",
+        fontSize: 8, color: 'var(--text-dim)', letterSpacing: 1.5, marginBottom: 4,
       }}>
         SUGGESTED QUESTIONS
       </div>
       {BOT_QUICK_PROMPTS.map((prompt) => (
-        <button
-          key={prompt}
-          className="quick-btn"
-          onMouseEnter={sfxNav}
-          onClick={() => onSelect(prompt)}
-        >
+        <button key={prompt} className="quick-btn" onMouseEnter={sfxNav} onClick={() => onSelect(prompt)}>
           {prompt}
         </button>
       ))}
@@ -130,6 +105,54 @@ const LoggerToast = memo(function LoggerToast({ visible, question }) {
   );
 });
 
+// ─── BotMessage ───────────────────────────────────────────────────────────────
+// Isolated so speaking state doesn't re-render the full message list
+
+const BotMessage = memo(function BotMessage({ msg, onSpeak }) {
+  const [speaking, setSpeaking] = useState(false);
+
+  const handleClick = useCallback(() => {
+    if (msg.role !== 'bot') return;
+    sfxClick();
+
+    if (speaking) {
+      // FIX 1: Click again to STOP speech
+      window.speechSynthesis?.cancel();
+      setSpeaking(false);
+      return;
+    }
+
+    setSpeaking(true);
+    onSpeak(msg.text, () => setSpeaking(false));
+  }, [msg, speaking, onSpeak]);
+
+  return (
+    <div
+      className={`msg msg-${msg.role}`}
+      onClick={handleClick}
+      title={msg.role === 'bot' ? (speaking ? '🔇 Click to stop' : '🔊 Click to hear') : ''}
+      style={{
+        cursor: msg.role === 'bot' ? 'pointer' : 'default',
+        // Subtle glow when actively speaking
+        boxShadow: speaking ? '0 0 10px rgba(0,212,255,.25)' : undefined,
+        borderColor: speaking ? 'rgba(0,212,255,.4)' : undefined,
+        transition: 'box-shadow .2s, border-color .2s',
+      }}
+    >
+      {msg.text}
+      {speaking && (
+        <span style={{
+          display: 'inline-block', marginLeft: 6,
+          fontSize: '0.7em', color: 'var(--cyan)',
+          animation: 'blink .55s infinite',
+        }}>
+          ▶ TAP TO STOP
+        </span>
+      )}
+    </div>
+  );
+});
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export function AIBot() {
@@ -139,14 +162,34 @@ export function AIBot() {
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState({ visible: false, question: '' });
 
-  const bottomRef = useRef(null);
+  // FIX 2: Track the last bot message ref for smart scrolling
+  const lastBotMsgRef = useRef(null);
+  const msgsContainerRef = useRef(null);
   const inputRef = useRef(null);
   const toastTimerRef = useRef(null);
   const { muted } = useSound();
 
-  // Auto-scroll to latest message
+  // FIX 2: On new message, scroll so the START of the latest bot reply is visible
+  // (not the bottom — so long replies are readable from the top)
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    if (!msgsContainerRef.current) return;
+    const container = msgsContainerRef.current;
+
+    // If loading, scroll to bottom to show typing indicator
+    if (loading) {
+      container.scrollTop = container.scrollHeight;
+      return;
+    }
+
+    // Find the last bot message and scroll its top to the top of the container
+    const allMsgs = container.querySelectorAll('.msg-bot');
+    if (allMsgs.length > 0) {
+      const lastBot = allMsgs[allMsgs.length - 1];
+      // Scroll so the start of the last bot reply is at the top of the viewport
+      // with a small offset so context above is still visible
+      const offsetTop = lastBot.offsetTop - 12;
+      container.scrollTo({ top: offsetTop, behavior: 'smooth' });
+    }
   }, [messages, loading]);
 
   // Focus input when panel opens
@@ -157,8 +200,11 @@ export function AIBot() {
     }
   }, [open]);
 
-  // Cleanup toast timer on unmount
-  useEffect(() => () => clearTimeout(toastTimerRef.current), []);
+  // Cleanup
+  useEffect(() => () => {
+    clearTimeout(toastTimerRef.current);
+    window.speechSynthesis?.cancel();
+  }, []);
 
   const showToast = useCallback((question) => {
     clearTimeout(toastTimerRef.current);
@@ -170,7 +216,11 @@ export function AIBot() {
     setOpen((prev) => {
       const next = !prev;
       if (next) sfxTransmission();
-      else sfxClick();
+      else {
+        sfxClick();
+        // Stop any speech when closing
+        window.speechSynthesis?.cancel();
+      }
       return next;
     });
   }, []);
@@ -214,14 +264,18 @@ export function AIBot() {
     }
   }, [handleSend]);
 
-  const handleBotMessageClick = useCallback((msg) => {
-    if (msg.role !== 'bot') return;
-    sfxClick();
-    // Lazy-load speech only on demand
-    import('../audio/engine').then(({ speakText }) => speakText(msg.text));
-  }, []);
-
   const handleInputChange = useCallback((e) => setInput(e.target.value), []);
+
+  // FIX 1: Speak handler with stop callback passed down to BotMessage
+  const handleSpeak = useCallback((text, onDone) => {
+    window.speechSynthesis?.cancel();
+    import('../audio/engine').then(({ speakWithCallbacks }) => {
+      speakWithCallbacks(text, {
+        onEnd: onDone,
+        onError: onDone,
+      });
+    });
+  }, []);
 
   const showQuickPrompts = messages.length <= 2;
 
@@ -233,25 +287,19 @@ export function AIBot() {
         <div className="bot-panel">
           <BotHeader onClose={handleToggle} />
 
-          <div className="bot-msgs">
+          {/* FIX 2: ref on container for manual scroll control */}
+          <div className="bot-msgs" ref={msgsContainerRef}>
             {messages.map((msg, i) => (
-              <div
-                key={i}
-                className={`msg msg-${msg.role}`}
-                onClick={() => handleBotMessageClick(msg)}
-                title={msg.role === 'bot' ? '🔊 Click to hear' : ''}
-                style={{ cursor: msg.role === 'bot' ? 'pointer' : 'default' }}
-              >
-                {msg.text}
-              </div>
+              <BotMessage key={i} msg={msg} onSpeak={handleSpeak} />
             ))}
             {loading && <TypingIndicator />}
-            <div ref={bottomRef} />
+            <div ref={lastBotMsgRef} />
           </div>
 
           {showQuickPrompts && <QuickPrompts onSelect={handleSend} />}
 
           <div className="bot-input-row">
+            {/* FIX 3: font-size:16px prevents iOS zoom on input focus */}
             <input
               ref={inputRef}
               className="bot-input"
@@ -259,6 +307,7 @@ export function AIBot() {
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}
+              style={{ fontSize: 16 }}
             />
             <button
               className="bot-send"
