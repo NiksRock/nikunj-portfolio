@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write   # 🔴 REQUIRED for gh-pages push
+  contents: write
 
 jobs:
   deploy:
@@ -28,8 +28,9 @@ jobs:
         env:
           VITE_SHEETS_WEBHOOK_URL: ${{ secrets.VITE_SHEETS_WEBHOOK_URL }}
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+          cname: nikunj.life
