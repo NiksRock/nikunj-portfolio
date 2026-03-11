@@ -275,6 +275,66 @@ export const BOT_KNOWLEDGE_BASE = {
     "I don't have enough context to answer that confidently. If it's about Nikunj's background or work, try asking it a different way — or reach out to him directly at nikunjpatel1581996@gmail.com.",
     "Not quite sure how to help with that. I'm best at answering questions about Nikunj's frontend engineering experience, skills, and availability for new roles.",
   ],
+  specialty: {
+  keywords: [
+    'specialty',
+    'specialisation',
+    'strength',
+    'what is nikunj good at',
+    "nikunj's specialty",
+    'main expertise',
+    'core expertise'
+  ],
+  responses: [
+    "Nikunj's strongest area is frontend architecture — particularly building scalable React platforms using micro-frontend architecture with Webpack Module Federation. He's spent several years designing systems where multiple teams can build and deploy independently while still sharing UI components.",
+    "His main specialty is large-scale React architecture. At Star Health he designed a micro-frontend platform used by 600K insurance agents, enabling multiple teams to ship features independently while sharing a unified component system.",
+  ],
+},
+
+difficulty: {
+  keywords: [
+    'difficulty',
+    'challenge',
+    'problem',
+    'hard',
+    'issue',
+    'what problem',
+    'difficult he facing'
+  ],
+  responses: [
+    "One of the key challenges Nikunj has tackled is scaling frontend development across multiple teams. At Star Health, he solved this by implementing a micro-frontend architecture with shared component libraries so teams could ship independently without breaking each other's work.",
+    "A common challenge in Nikunj's projects is managing large enterprise UI systems used by hundreds of thousands of users. He addresses this through modular architecture, reusable component systems, and strict code quality practices."
+  ],
+},
+
+candidate: {
+  keywords: [
+    'candidate',
+    'how is nikunj',
+    'good candidate',
+    'should we hire',
+    'fit for role',
+    'evaluation'
+  ],
+  responses: [
+    "Nikunj is considered a strong frontend engineering candidate, especially for teams building complex React applications. His experience includes architecting micro-frontend platforms, building reusable component systems, and delivering production software used by hundreds of thousands of users.",
+    "If you're looking for a senior frontend engineer who can both code and design scalable architecture, Nikunj is a solid candidate. His background includes 7+ years of React development and leading frontend architecture for enterprise platforms."
+  ],
+},
+
+abuse: {
+  keywords: [
+    'stupid',
+    'idiot',
+    'dumb',
+    'useless',
+    'trash'
+  ],
+  responses: [
+    "Haha, fair enough 😄. If you have questions about Nikunj's work or projects, I'm happy to help.",
+    "I'll take that as feedback 😅. Let me know if you'd like to know more about Nikunj's experience, skills, or projects."
+  ],
+},
 };
 
 // ─── Typewriter strings ───────────────────────────────────────────────────────
