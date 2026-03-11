@@ -1,4 +1,4 @@
-export const GLOBAL_CSS = `
+
   @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&display=swap');
 
   /* ─── Reset ─────────────────────────────────────────────── */
@@ -324,4 +324,3 @@ body {
     .skills-cards { grid-template-columns: 1fr !important; }
     .hero-card-wrap > div { width: 160px !important; height: 240px !important; }
   }
-`;

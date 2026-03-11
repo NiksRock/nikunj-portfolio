@@ -1,21 +1,16 @@
 import { SoundProvider } from './audio/SoundContext';
 import { AIBot }      from './components/AIBot';
 import { StarField }  from './components/StarField';
-import { useScrollProgress } from './hooks';
-import { GLOBAL_CSS }  from './styles/global';
+import { useScrollProgress } from './hooks'; 
 import { Nav }        from './sections/Nav';
 import { Hero }       from './sections/Hero';
 import { Skills }     from './sections/Skills';
 import { Experience } from './sections/Experience';
 import { Projects }   from './sections/Projects';
 import { Contact }    from './sections/Contact';
-
+import  './styles/global.css';
 // ─── Global styles injected once ─────────────────────────────────────────────
-
-function GlobalStyles() {
-  return <style>{GLOBAL_CSS}</style>;
-}
-
+ 
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 function PortfolioLayout() {
@@ -43,8 +38,7 @@ function PortfolioLayout() {
 
 export default function Portfolio() {
   return (
-    <SoundProvider>
-      <GlobalStyles />
+    <SoundProvider> 
       <PortfolioLayout />
     </SoundProvider>
   );
