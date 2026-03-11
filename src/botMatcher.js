@@ -3,10 +3,9 @@ import { BOT_KNOWLEDGE_BASE } from './data';
 /**
  * Matches user input against the knowledge base using keyword scoring.
  * Longer keyword matches score higher (e.g. "micro frontend" > "frontend").
- * Falls back to a random fallback response if no match is found.
  *
  * @param {string} input - Raw user input string
- * @returns {string} - Response text
+ * @returns {{ response: string, isFallback: boolean }}
  */
 export function getBotResponse(input) {
   const query = input.toLowerCase().trim();
@@ -22,7 +21,6 @@ export function getBotResponse(input) {
 
     for (const keyword of keywords) {
       if (query.includes(keyword)) {
-        // Weight multi-word keywords higher than single-word ones
         score += keyword.split(' ').length;
       }
     }
@@ -35,9 +33,22 @@ export function getBotResponse(input) {
 
   if (bestCategory && bestScore > 0) {
     const { responses } = bestCategory;
-    return responses[Math.floor(Math.random() * responses.length)];
+    return {
+      response: responses[Math.floor(Math.random() * responses.length)],
+      isFallback: false,
+    };
   }
 
   const fallbacks = BOT_KNOWLEDGE_BASE.fallback;
-  return fallbacks[Math.floor(Math.random() * fallbacks.length)];
+  return {
+    response: fallbacks[Math.floor(Math.random() * fallbacks.length)],
+    isFallback: true,
+  };
+}
+
+/**
+ * @deprecated use getBotResponse's isFallback field instead
+ */
+export function isFallbackResponse() {
+  return false;
 }

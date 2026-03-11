@@ -81,7 +81,7 @@ export const EXPERIENCE = [
     tag:     'ENTERPRISE',
     role:    'Software Developer',
     period:  'Jan 2019 — Dec 2019',
-    color:   'var(--muted)',
+    color:   'var(--muted-bright)',
     achievements: [
       'Built QVision — a QA monitoring dashboard displaying CI pipeline execution results with analytics and data visualization.',
       'Developed frontend systems using React, Redux, and Spring Boot for internal applications and operational dashboards.',
@@ -164,100 +164,116 @@ export const BOT_QUICK_PROMPTS = [
 
 /**
  * Keyword-matched response knowledge base.
- * Each category has an array of keywords and multiple response variants
- * (randomly selected to avoid feeling robotic).
+ * Responses are conversational and human-sounding.
  */
 export const BOT_KNOWLEDGE_BASE = {
   greeting: {
     keywords: ['hi', 'hello', 'hey', 'sup', 'howdy', 'yo', 'greetings', 'good morning', 'good afternoon'],
     responses: [
-      "NEXUS-AI ONLINE ⚡ Operative confirmed. I'm Nikunj's tactical portfolio assistant — ask me about his skills, experience, or availability.",
-      "Scanning records... Hello! I'm NEXUS-AI. What would you like to know about Senior Frontend Engineer Nikunj Patel?",
+      "Hey! Welcome to Nikunj's portfolio. I'm here to help you learn about his work — feel free to ask about his skills, projects, or whether he's available for new opportunities.",
+      "Hi there! Happy to tell you about Nikunj. He's a Senior Frontend Engineer with 7 years of experience, currently working at Star Health Insurance in Pune. What would you like to know?",
+      "Hello! I can walk you through Nikunj's background, projects, tech stack, or help you figure out if he'd be a good fit for your team. What's on your mind?",
     ],
   },
   who: {
     keywords: ['who is', 'who are', 'about nikunj', 'tell me about', 'introduce', 'summary', 'overview'],
     responses: [
-      'Operative confirmed — Nikunj Patel is a Senior Frontend Engineer with 7 years of experience architecting enterprise web platforms using React, Next.js, TypeScript, and Webpack Module Federation. Currently SDE-3 at Star Health Insurance, serving 600K agents.',
-      'Scanning records... Nikunj is a seasoned SDE-3 based in Pune, India, specializing in micro-frontend architecture, reusable component systems, and cloud-native frontend delivery on AWS.',
+      "Nikunj Patel is a Senior Frontend Engineer based in Pune, India, with 7 years of experience building enterprise-scale web platforms. He's currently SDE-3 at Star Health Insurance, where he led the architecture of a micro-frontend platform that serves 600K insurance agents. His main strengths are React, Next.js, TypeScript, and Webpack Module Federation.",
+      "In short — Nikunj is a frontend specialist who's spent the last 7 years shipping production-grade React applications. What sets him apart is his deep focus on micro-frontend architecture and building scalable component systems. He's currently at Star Health Insurance leading frontend development for a platform used by 600,000 agents.",
     ],
   },
   skills: {
-    keywords: ['skill', 'tech', 'technology', 'stack', 'tools', 'expertise', 'proficient', 'know', 'languages', 'frameworks'],
+    keywords: ['skill', 'tech', 'technology', 'stack', 'tools', 'expertise', 'proficient', 'know', 'languages', 'frameworks', 'what can'],
     responses: [
-      'Affirmative. Core weapons loadout:\n\n⚡ Languages: JavaScript ES6+, TypeScript, HTML5, CSS3\n⚛️ Frameworks: React, Next.js, Redux, Redux-Saga, Material UI\n🏗️ Architecture: Micro-Frontends via Webpack Module Federation\n🧪 Quality: Jest, React Testing Library, SonarQube, Snyk\n☁️ Cloud: AWS Amplify, S3, CloudFront, EC2, CodeArtifact',
+      "Nikunj's core stack:\n\n• JavaScript / TypeScript — day-to-day languages\n• React & Next.js — his primary frameworks for 6+ years\n• Webpack Module Federation — his specialty for micro-frontend architecture\n• Redux & Redux-Saga — state management at scale\n• Material UI + Storybook — component-driven UI development\n• AWS — Amplify, S3, CloudFront, EC2, CodeArtifact\n• Testing — Jest, React Testing Library, SonarQube, Snyk\n\nHe's most confident in frontend architecture decisions and building systems that multiple teams can work on simultaneously.",
+      "Beyond just 'knowing React', Nikunj specializes in frontend architecture — specifically how to structure large applications that multiple teams can build independently using Module Federation. He's also strong on the tooling side: CI/CD, code quality gates, and building shared component systems that don't become a maintenance headache.",
     ],
   },
   experience: {
     keywords: ['experience', 'work history', 'career', 'companies', 'worked', 'employment', 'years', 'how long'],
     responses: [
-      'Scanning field record... 7 years active duty across 4 deployments:\n\n🔴 Star Health Insurance — SDE-3 (Apr 2023–Present)\n🔵 AltezzaSys Systems — Software Engineer (Mar–Nov 2022)\n🟡 TechAvidus — Software Developer (Feb 2020–Feb 2022)\n⬜ Lodestone — Software Developer (Jan–Dec 2019)',
+      "Nikunj has 7 years of frontend experience across four companies:\n\n1. Star Health Insurance (Apr 2023–Present) — SDE-3, leading micro-frontend architecture\n2. AltezzaSys Systems (Mar–Nov 2022) — building health-tech dashboards for BSWHealth\n3. TechAvidus (Feb 2020–Feb 2022) — full-stack product development with React\n4. Lodestone (Jan–Dec 2019) — his first role, building internal tools and dashboards\n\nHe's spent most of his career in product/platform roles rather than agency work, so he's used to owning things long-term.",
     ],
   },
   current: {
     keywords: ['current', 'currently', 'now', 'present', 'latest', 'star health', 'atom portal'],
     responses: [
-      'Current deployment: SDE-3 at Star Health & Allied Insurance, Pune (Apr 2023–Present). Leading architecture of the ATOM Portal — a 4-app micro-frontend platform on Webpack Module Federation serving 600K agents across insurance distribution channels.',
+      "Right now, Nikunj is SDE-3 at Star Health & Allied Insurance in Pune (since April 2023). He's been leading the ATOM Portal — a micro-frontend platform built with Webpack Module Federation that 600K insurance agents rely on across multiple business channels. He also introduced shared tooling across the 10-engineer team, including Storybook component libraries and automated quality gates.",
     ],
   },
   microfrontend: {
     keywords: ['micro frontend', 'microfrontend', 'micro-frontend', 'module federation', 'webpack', 'mfe', 'architecture'],
     responses: [
-      'Micro-frontend architecture is Nikunj\'s primary specialization. At Star Health he architected 4 independently deployable React/Next.js apps sharing a Module Federation runtime. Teams consume shared UI packages distributed via AWS CodeArtifact — enabling parallel feature shipping without conflicts.',
+      "Micro-frontend architecture is genuinely Nikunj's strongest area. At Star Health, he designed and built a system where 4 separate React/Next.js apps are deployed independently but share a common Module Federation runtime. Teams can ship features without coordinating deployments, and shared UI packages are distributed through AWS CodeArtifact so everyone stays in sync without copy-pasting code.\n\nIt's a real production setup serving 600K users — not just a side project or experiment.",
+      "He's spent the last couple of years deep in Module Federation — figuring out how to split large React codebases into independently deployable units that still feel like one coherent product to users. That includes handling shared dependencies, routing between micro-apps, and keeping a team of 10 engineers productive without stepping on each other.",
     ],
   },
   projects: {
     keywords: ['project', 'projects', 'built', 'developed', 'growpro', 'claims', 'atom', 'qvision', 'what has he made'],
     responses: [
-      'Mission archive:\n\n🚀 ATOM Portal — MFE platform, 600K agents\n📣 GrowPro — Marketing campaign engine, 40–55% engagement\n📦 @star-ui/atom-claims-ui — Internal claims UI package, 20+ components\n📊 QVision — CI pipeline QA dashboard\n👥 Tango HRMS — Attendance management module',
+      "Here are the main things Nikunj has shipped:\n\n• ATOM Portal — 4-app MFE platform at Star Health, 600K users\n• GrowPro — marketing campaign tool that gave 600K agents a drag-and-drop poster creator; drove 40–55% engagement lift\n• @star-ui/atom-claims-ui — internal npm package covering the entire claims workflow UI (20+ components, 0 breaking changes)\n• QVision — a CI pipeline monitoring dashboard he built at Lodestone\n\nMost of his projects are internal enterprise tools that don't have public URLs, but I can go deeper on any of them.",
     ],
   },
   growpro: {
     keywords: ['growpro', 'marketing', 'campaign', 'poster', 'drag and drop'],
     responses: [
-      'GrowPro is a marketing platform enabling 600K agents to create personalized campaign materials — achieving 40–55% engagement. Key systems: drag-and-drop poster editor (react-draggable), dynamic template rendering, HTML-to-PDF export via Next.js API routes, and asset management supporting 100K+ files.',
+      "GrowPro is one of his more interesting projects — it's a marketing platform he built at Star Health that lets 600K insurance agents create personalized campaign materials without needing a designer. The core of it was a drag-and-drop poster editor using react-draggable, with dynamic templates that pull in real agent data at runtime. It exports to PDF via Next.js API routes and manages 100K+ campaign assets on S3. The result was a 40–55% jump in agent engagement with marketing materials.",
     ],
   },
   education: {
     keywords: ['education', 'degree', 'study', 'college', 'university', 'qualification', 'msc', 'bca'],
     responses: [
-      'Academic clearance confirmed:\n\n🎓 M.Sc ICT — J.P. Dawer Institute / VNSGU (2017–2019)\n🎓 BCA — M.K. Institute / VNSGU (2014–2017)',
+      "Nikunj has a Master's in ICT from J.P. Dawer Institute (VNSGU, 2017–2019) and a BCA from M.K. Institute of Computer Studies (VNSGU, 2014–2017). Both from Veer Narmad South Gujarat University.",
     ],
   },
   contact: {
     keywords: ['contact', 'email', 'phone', 'reach', 'hire', 'linkedin', 'github', 'connect', 'number'],
     responses: [
-      'Transmitting contact data:\n\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156\n💻 github.com/NiksRock',
+      "Here's how to reach Nikunj:\n\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156\n💻 github.com/NiksRock\n\nEmail or LinkedIn tends to get the fastest response.",
     ],
   },
   availability: {
     keywords: ['available', 'availability', 'hire', 'hiring', 'open to work', 'job', 'opportunity', 'looking', 'open to'],
     responses: [
-      'Operative is open to deploy. For opportunities, transmit directly:\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156',
+      "Yes, Nikunj is open to new opportunities! He's based in Pune but open to discussing remote roles or relocation depending on the opportunity. Best way to reach him is directly:\n\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156",
+      "He's actively exploring what's next. If you're looking for a senior frontend engineer with real micro-frontend architecture experience and a track record at scale, it's worth reaching out. Drop him a message at nikunjpatel1581996@gmail.com.",
     ],
   },
   aws: {
     keywords: ['aws', 'amazon', 'cloud', 'amplify', 's3', 'cloudfront', 'ec2', 'infrastructure', 'deployment'],
     responses: [
-      'AWS stack confirmed: Amplify for CI/CD hosting, S3 for asset storage, CloudFront for CDN delivery, EC2 for API infrastructure, and CodeArtifact for private NPM package distribution across engineering teams.',
+      "On the cloud side, Nikunj primarily works with AWS. His regular toolkit includes Amplify for CI/CD-connected hosting, S3 for asset storage, CloudFront as a CDN, EC2 for backend APIs, and CodeArtifact for distributing private npm packages to his team. It's a practical setup built around frontend needs rather than deep DevOps work.",
     ],
   },
   storybook: {
     keywords: ['storybook', 'component library', 'design system', 'ui components', 'reusable'],
     responses: [
-      'Affirmative — Nikunj built Storybook-driven component systems at both Star Health (20+ components across all ATOM apps) and AltezzaSys (BSWHealth platform). Design-system-first thinking is core to his frontend architecture approach.',
+      "Storybook has been a constant in Nikunj's work. At Star Health he built a 20+ component library that's used across all 4 ATOM apps, and he did something similar at AltezzaSys for the BSWHealth platform. His approach is component-first — design in isolation, document in Storybook, then compose into features. It keeps things consistent and makes onboarding new engineers much faster.",
     ],
   },
   location: {
     keywords: ['location', 'where', 'city', 'country', 'based', 'india', 'pune', 'remote', 'relocate'],
     responses: [
-      'Current coordinates: Pune, India. Open to discussing remote or relocation opportunities — transmit to nikunjpatel1581996@gmail.com.',
+      "Nikunj is based in Pune, India. He's open to remote roles and can discuss relocation for the right opportunity. Reach him at nikunjpatel1581996@gmail.com to talk specifics.",
+    ],
+  },
+  salary: {
+    keywords: ['salary', 'ctc', 'compensation', 'pay', 'rate', 'package', 'cost', 'budget'],
+    responses: [
+      "I don't have details on compensation expectations — that's best discussed directly with Nikunj. You can reach him at nikunjpatel1581996@gmail.com or +91 8980368059.",
+    ],
+  },
+  notice: {
+    keywords: ['notice period', 'notice', 'joining', 'when can', 'start date', 'available from'],
+    responses: [
+      "I don't have specifics on his notice period or earliest joining date. Worth asking him directly — nikunjpatel1581996@gmail.com or +91 8980368059.",
     ],
   },
   fallback: [
-    "Signal unclear. I'm optimized for questions about Nikunj's skills, experience, projects, education, or contact info. Try one of those?",
-    "Scanning... no matching records. Ask me about his tech stack, work history, key projects, or how to get in touch.",
-    "Transmission incomplete. I can brief you on Nikunj's 7 years of frontend engineering — skills, missions, availability. What would you like to know?",
+    "Hmm, I'm not sure I have a good answer for that. I'm mainly set up to talk about Nikunj's skills, projects, work history, and availability. Could you rephrase, or try one of the quick prompts below?",
+    "That one's a bit outside what I know well. I can tell you about Nikunj's tech stack, career history, specific projects, or how to get in touch. What would be most useful?",
+    "I don't have enough context to answer that confidently. If it's about Nikunj's background or work, try asking it a different way — or reach out to him directly at nikunjpatel1581996@gmail.com.",
+    "Not quite sure how to help with that. I'm best at answering questions about Nikunj's frontend engineering experience, skills, and availability for new roles.",
   ],
 };
 
@@ -288,3 +304,8 @@ export const HERO_STATS = [
   { value: '600K', label: 'USERS SERVED' },
   { value: '20+',  label: 'COMPONENTS' },
 ];
+
+// ─── Google Sheets logger config ──────────────────────────────────────────────
+// Free unanswered-question logging via Google Apps Script web app
+// Setup: see README_BOT_LOGGER.md
+export const SHEETS_WEBHOOK_URL = import.meta.env.VITE_SHEETS_WEBHOOK_URL || '';

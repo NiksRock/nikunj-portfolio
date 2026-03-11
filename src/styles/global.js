@@ -6,13 +6,19 @@ export const GLOBAL_CSS = `
 
   /* ─── Design tokens ──────────────────────────────────────── */
   :root {
-    --void:    #020408;
-    --surface: #070d16;
-    --red:     #ff4655;
-    --cyan:    #00d4ff;
-    --gold:    #f0a500;
-    --white:   #e8f0ff;
-    --muted:   #2a3a50;
+    --void:         #020408;
+    --surface:      #070d16;
+    --surface-2:    #0d1525;
+    --red:          #ff4655;
+    --red-dim:      rgba(255,70,85,.15);
+    --cyan:         #00d4ff;
+    --gold:         #f0a500;
+    --white:        #f0f6ff;        /* brighter base text */
+    --text-primary: #dce8ff;        /* primary readable text */
+    --text-body:    #a8bdd8;        /* body copy — up from #2a3a50 opacity */
+    --text-dim:     #5a7a9a;        /* truly secondary info */
+    --muted:        #2a3a50;        /* borders & decorative only */
+    --muted-bright: #6b8aaa;        /* muted-but-readable text */
 
     --clip:    polygon(0 0, calc(100% - 18px) 0, 100% 18px, 100% 100%, 18px 100%, 0 calc(100% - 18px));
     --clip-sm: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 10px 100%, 0 calc(100% - 10px));
@@ -22,7 +28,7 @@ export const GLOBAL_CSS = `
   html { scroll-behavior: smooth; }
   body {
     background: var(--void);
-    color: var(--white);
+    color: var(--text-primary);
     font-family: 'Barlow', sans-serif;
     overflow-x: hidden;
   }
@@ -52,6 +58,10 @@ export const GLOBAL_CSS = `
     91% { opacity: 1; clip-path: inset(40% 0 35% 0); transform: translate(5px, 0); color: var(--red) }
     93% { opacity: 1; clip-path: inset(10% 0 70% 0); transform: translate(-3px, 0) }
     95% { opacity: 0 }
+  }
+  @keyframes loggerPop {
+    from { opacity: 0; transform: translateX(20px); }
+    to   { opacity: 1; transform: translateX(0); }
   }
 
   /* ─── Utility classes ────────────────────────────────────── */
@@ -93,10 +103,12 @@ export const GLOBAL_CSS = `
   .btn-red:hover         { box-shadow: 0 0 28px rgba(255,70,85,.55); }
   .btn-cyan  { background: transparent; color: var(--cyan); border: 1px solid var(--cyan); }
   .btn-cyan:hover { background: rgba(0,212,255,.1); box-shadow: 0 0 18px rgba(0,212,255,.3); }
-  .btn-ghost { background: transparent; color: var(--muted); border: 1px solid var(--muted); }
+  .btn-ghost { background: transparent; color: var(--muted-bright); border: 1px solid rgba(90,122,154,.5); }
   .btn-ghost:hover { color: var(--white); border-color: var(--white); }
 
-  .kf::before  { content: '▸'; color: var(--red); margin-right: 8px; }
+  /* Achievement bullet */
+  .kf { padding-left: 18px; position: relative; }
+  .kf::before { content: '▸'; color: var(--red); position: absolute; left: 0; top: 0; }
 
   .sk-bar {
     height: 3px;
@@ -112,12 +124,29 @@ export const GLOBAL_CSS = `
   .sound-hint {
     font-family: 'Share Tech Mono', monospace;
     font-size: 8px;
-    color: rgba(42,58,80,.55);
+    color: var(--text-dim);
     letter-spacing: 1.2px;
     display: flex;
     align-items: center;
     gap: 5px;
     margin-top: 10px;
+  }
+
+  /* ─── Tag chips ──────────────────────────────────────────── */
+  .tag-chip {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--text-dim);
+    border: 1px solid rgba(42,58,80,.6);
+    padding: 2px 7px;
+  }
+  .tag-chip-cyan {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 9px;
+    color: var(--cyan);
+    background: rgba(0,212,255,.07);
+    padding: 2px 6px;
+    border: 1px solid rgba(0,212,255,.25);
   }
 
   /* ─── Bot ────────────────────────────────────────────────── */
@@ -135,7 +164,7 @@ export const GLOBAL_CSS = `
 
   .bot-panel {
     position: fixed; bottom: 96px; right: 28px; z-index: 4000;
-    width: 360px; height: 520px;
+    width: 380px; height: 540px;
     background: var(--surface);
     clip-path: var(--clip);
     border: 1px solid rgba(255,70,85,.35);
@@ -150,28 +179,31 @@ export const GLOBAL_CSS = `
   .bot-msgs::-webkit-scrollbar-thumb { background: var(--red); }
 
   .msg {
-    max-width: 85%;
-    padding: 10px 14px;
+    max-width: 88%;
+    padding: 11px 14px;
     font-family: 'Barlow', sans-serif;
-    font-size: 13px;
-    line-height: 1.55;
+    font-size: 13.5px;
+    line-height: 1.6;
     animation: msgIn .25s ease forwards;
     border: 1px solid transparent;
     white-space: pre-wrap;
   }
   .msg-bot {
-    background: rgba(255,70,85,.1);
+    background: rgba(13, 21, 37, 0.9);
     border-color: rgba(255,70,85,.2);
     clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
     align-self: flex-start;
+    color: var(--text-primary);
   }
   .msg-user {
-    background: rgba(0,212,255,.08);
-    border-color: rgba(0,212,255,.25);
+    background: rgba(0,212,255,.06);
+    border-color: rgba(0,212,255,.2);
     clip-path: polygon(8px 0, 100% 0, 100% 100%, 0 100%, 0 8px);
     align-self: flex-end;
     color: var(--cyan);
   }
+  /* Bot message bullet styling */
+  .msg-bot strong { color: var(--white); font-weight: 600; }
 
   .bot-input-row {
     display: flex;
@@ -184,13 +216,14 @@ export const GLOBAL_CSS = `
     flex: 1;
     background: rgba(2,4,8,.6);
     border: 1px solid rgba(42,58,80,.5);
-    color: var(--white);
+    color: var(--text-primary);
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
     padding: 9px 12px;
     outline: none;
     letter-spacing: 1px;
   }
+  .bot-input::placeholder { color: var(--text-dim); }
   .bot-input:focus { border-color: var(--red); }
   .bot-send {
     background: var(--red);
@@ -199,7 +232,9 @@ export const GLOBAL_CSS = `
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
     clip-path: polygon(0 0, 100% 0, 100% 100%, 8px 100%, 0 calc(100% - 8px));
+    transition: background .2s;
   }
+  .bot-send:hover { background: #ff5f6d; }
   .bot-send:disabled { opacity: .5; cursor: not-allowed; }
 
   .typing-dot {
@@ -210,17 +245,42 @@ export const GLOBAL_CSS = `
   }
   .quick-btn {
     background: rgba(255,70,85,.08);
-    border: 1px solid rgba(255,70,85,.25);
-    color: rgba(232,240,255,.7);
+    border: 1px solid rgba(255,70,85,.2);
+    color: rgba(220,232,255,.8);
     font-family: 'Share Tech Mono', monospace;
     font-size: 9px;
-    padding: 4px 10px;
+    padding: 5px 10px;
     cursor: pointer;
     letter-spacing: .5px;
     clip-path: var(--clip-sm);
-    transition: background .2s;
+    transition: background .2s, color .2s;
   }
-  .quick-btn:hover { background: rgba(255,70,85,.18); }
+  .quick-btn:hover { background: rgba(255,70,85,.18); color: #fff; }
+
+  /* ─── Logger toast ───────────────────────────────────────── */
+  .logger-toast {
+    position: fixed;
+    bottom: 100px;
+    left: 24px;
+    z-index: 5000;
+    background: var(--surface-2);
+    border: 1px solid rgba(240,165,0,.4);
+    clip-path: var(--clip-sm);
+    padding: 10px 14px;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 10px;
+    color: var(--gold);
+    letter-spacing: .8px;
+    animation: loggerPop .3s ease forwards;
+    max-width: 260px;
+    line-height: 1.5;
+  }
+  .logger-toast-label {
+    font-size: 8px;
+    color: var(--text-dim);
+    letter-spacing: 1.5px;
+    margin-bottom: 3px;
+  }
 
   /* ─── Responsive ─────────────────────────────────────────── */
   @media (max-width: 900px) {
@@ -243,8 +303,9 @@ export const GLOBAL_CSS = `
     .proj-grid    { grid-template-columns: 1fr !important; }
     .contact-btns { flex-direction: column !important; align-items: stretch !important; }
     .contact-btns .btn { text-align: center !important; }
-    .bot-panel    { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 90px !important; height: 400px !important; }
+    .bot-panel    { width: calc(100vw - 32px) !important; right: 16px !important; bottom: 90px !important; height: 420px !important; }
     .bot-fab      { right: 16px !important; bottom: 20px !important; }
+    .logger-toast { left: 16px !important; bottom: 90px !important; }
   }
   @media (max-width: 480px) {
     .skills-cards { grid-template-columns: 1fr !important; }

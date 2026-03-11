@@ -4,9 +4,6 @@ import { useReveal, useSkillBarReveal, useTypewriter } from '../hooks';
 import { useSound } from '../audio/SoundContext';
 
 // ─── Brackets ─────────────────────────────────────────────────────────────────
-/**
- * Decorative corner brackets placed absolutely inside a `position:relative` parent.
- */
 export function Brackets({ color = 'var(--red)' }) {
   const base = { position: 'absolute', width: 13, height: 13, zIndex: 10, borderColor: color };
   const corners = {
@@ -26,27 +23,16 @@ export function Brackets({ color = 'var(--red)' }) {
 }
 
 // ─── Reveal ───────────────────────────────────────────────────────────────────
-/**
- * Wraps children in a div that animates in when it enters the viewport.
- */
 export function Reveal({ children, delay = 0, style = {}, className = '' }) {
   const ref = useReveal(delay);
   return (
-    <div
-      ref={ref}
-      className={`reveal${className ? ` ${className}` : ''}`}
-      style={style}
-    >
+    <div ref={ref} className={`reveal${className ? ` ${className}` : ''}`} style={style}>
       {children}
     </div>
   );
 }
 
 // ─── MagBtn ───────────────────────────────────────────────────────────────────
-/**
- * Magnetic button — follows the cursor slightly on hover.
- * Plays sound effects on hover and click.
- */
 export function MagBtn({ children, variant = 'red', onClick, href, style = {} }) {
   const ref = useRef(null);
   const Tag = href ? 'a' : 'button';
@@ -59,23 +45,14 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
     )`;
   };
 
-  const handleMouseLeave = () => {
-    ref.current.style.transform = '';
-  };
-
-  const handleClick = (e) => {
-    sfxClick();
-    onClick?.(e);
-  };
-
   return (
     <Tag
       ref={ref}
       className={`btn btn-${variant}`}
       onMouseEnter={sfxBtn}
       onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      onClick={handleClick}
+      onMouseLeave={() => { ref.current.style.transform = ''; }}
+      onClick={(e) => { sfxClick(); onClick?.(e); }}
       href={href}
       style={style}
     >
@@ -85,43 +62,37 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
 }
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
-/**
- * Animated typewriter that cycles through a string array.
- */
 export function Typewriter({ items }) {
   const text = useTypewriter(items);
   return (
     <span style={{ fontFamily: "'Share Tech Mono',monospace", color: 'var(--cyan)' }}>
       {text}
       <span style={{
-        display: 'inline-block',
-        width: 2, height: '1em',
-        background: 'var(--cyan)',
-        marginLeft: 3,
-        verticalAlign: 'middle',
-        animation: 'blink .8s infinite',
+        display: 'inline-block', width: 2, height: '1em',
+        background: 'var(--cyan)', marginLeft: 3,
+        verticalAlign: 'middle', animation: 'blink .8s infinite',
       }} />
     </span>
   );
 }
 
 // ─── SkillBar ─────────────────────────────────────────────────────────────────
-/**
- * Animated progress bar that fills to `level`% when scrolled into view.
- */
 export function SkillBar({ label, level, delay = 0 }) {
   const barRef = useSkillBarReveal(level, delay);
   return (
     <div style={{ marginBottom: 14 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--muted)', letterSpacing: 1 }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+        <span style={{
+          fontFamily: "'Share Tech Mono',monospace",
+          fontSize: 11, color: 'var(--muted-bright)', letterSpacing: 1,
+        }}>
           {label}
         </span>
         <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--red)' }}>
           {level}%
         </span>
       </div>
-      <div style={{ height: 3, background: 'rgba(42,58,80,.5)' }}>
+      <div style={{ height: 3, background: 'rgba(42,58,80,.4)', borderRadius: 2 }}>
         <div ref={barRef} className="sk-bar" />
       </div>
     </div>
@@ -129,9 +100,6 @@ export function SkillBar({ label, level, delay = 0 }) {
 }
 
 // ─── SectionHead ──────────────────────────────────────────────────────────────
-/**
- * Consistent section heading with sub-label, decorative divider, and title.
- */
 export function SectionHead({ sub, title }) {
   return (
     <Reveal>
@@ -163,10 +131,6 @@ export function SectionHead({ sub, title }) {
 }
 
 // ─── SpeakText ────────────────────────────────────────────────────────────────
-/**
- * Wraps a text node; clicking it reads the text aloud via Web Speech API
- * with a subtle active-state indicator.
- */
 export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   const { muted } = useSound();
   const [active, setActive] = useState(false);
@@ -198,10 +162,8 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
       {children}
       {active && (
         <span style={{
-          marginLeft: 5,
-          fontSize: '0.7em',
-          color: 'var(--cyan)',
-          animation: 'blink .55s infinite',
+          marginLeft: 5, fontSize: '0.7em',
+          color: 'var(--cyan)', animation: 'blink .55s infinite',
         }}>
           ▶
         </span>
