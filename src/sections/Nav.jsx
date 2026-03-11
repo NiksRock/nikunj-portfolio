@@ -1,3 +1,4 @@
+import { memo, useCallback } from 'react';
 import { sfxBtn, sfxClick } from '../audio/engine';
 import { useSound } from '../audio/SoundContext';
 import { useScrolled } from '../hooks';
@@ -6,10 +7,10 @@ import { MagBtn } from '../components/primitives';
 
 // ─── Sound Toggle Button ──────────────────────────────────────────────────────
 
-function SoundToggle({ muted, onToggle }) {
+const SoundToggle = memo(function SoundToggle({ muted, onToggle }) {
   return (
     <button
-      onClick={() => { sfxClick(); onToggle(); }}
+      onClick={onToggle}
       title={muted ? 'Unmute interaction sounds & voice' : 'Mute all sounds'}
       style={{
         background: 'none',
@@ -38,13 +39,49 @@ function SoundToggle({ muted, onToggle }) {
       )}
     </button>
   );
-}
+});
+
+// ─── Nav link — isolated to prevent full nav re-render on hover ───────────────
+
+const NavLink = memo(function NavLink({ label, href }) {
+  const handleMouseOver = useCallback((e) => {
+    e.target.style.color = 'var(--white)';
+    e.target.style.textShadow = '0 0 12px var(--red)';
+  }, []);
+
+  const handleMouseOut = useCallback((e) => {
+    e.target.style.color = 'var(--muted)';
+    e.target.style.textShadow = 'none';
+  }, []);
+
+  return (
+    <a
+      href={href}
+      onMouseEnter={sfxBtn}
+      onMouseOver={handleMouseOver}
+      onMouseOut={handleMouseOut}
+      style={{
+        fontFamily: "'Share Tech Mono',monospace",
+        fontSize: 11, color: 'var(--muted)',
+        textDecoration: 'none', letterSpacing: 1.5,
+        transition: 'color .2s, text-shadow .2s',
+      }}
+    >
+      {label}
+    </a>
+  );
+});
 
 // ─── Nav ──────────────────────────────────────────────────────────────────────
 
-export function Nav({ scrollProgress }) {
+export const Nav = memo(function Nav({ scrollProgress }) {
   const scrolled = useScrolled(20);
   const { muted, toggle } = useSound();
+
+  const handleToggle = useCallback(() => {
+    sfxClick();
+    toggle();
+  }, [toggle]);
 
   return (
     <>
@@ -97,22 +134,13 @@ export function Nav({ scrollProgress }) {
         {/* Nav links */}
         <div className="nav-links" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
           {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              onMouseEnter={sfxBtn}
-              style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--muted)', textDecoration: 'none', letterSpacing: 1.5, transition: 'color .2s, text-shadow .2s' }}
-              onMouseOver={(e) => { e.target.style.color = 'var(--white)'; e.target.style.textShadow = '0 0 12px var(--red)'; }}
-              onMouseOut={(e) => { e.target.style.color = 'var(--muted)'; e.target.style.textShadow = 'none'; }}
-            >
-              {label}
-            </a>
+            <NavLink key={label} label={label} href={href} />
           ))}
-          <SoundToggle muted={muted} onToggle={toggle} />
+          <SoundToggle muted={muted} onToggle={handleToggle} />
         </div>
 
         <MagBtn variant="red" href="#contact">DEPLOY ME</MagBtn>
       </nav>
     </>
   );
-}
+});

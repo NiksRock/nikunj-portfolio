@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState } from 'react';
+import { memo, useCallback, useEffect, useRef, useState } from 'react';
 import { sfxBtn, sfxClick, sfxNav, sfxTransmission, sfxTyping } from '../audio/engine';
 import { useSound } from '../audio/SoundContext';
 import { logUnansweredQuestion } from '../botLogger';
 import { getBotResponse } from '../botMatcher';
-import { BOT_QUICK_PROMPTS } from '../data';
+import { BOT_QUICK_PROMPTS, SHEETS_WEBHOOK_URL } from '../data';
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -15,9 +15,11 @@ const INITIAL_MESSAGE = {
 const RESPONSE_DELAY_MIN = 400;
 const RESPONSE_DELAY_JITTER = 320;
 
+const TYPING_DELAYS = [0, 150, 300];
+
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
-function BotHeader({ onClose }) {
+const BotHeader = memo(function BotHeader({ onClose }) {
   return (
     <div style={{
       padding: '12px 16px',
@@ -67,22 +69,22 @@ function BotHeader({ onClose }) {
       </button>
     </div>
   );
-}
+});
 
-function TypingIndicator() {
+const TypingIndicator = memo(function TypingIndicator() {
   return (
     <div
       className="msg msg-bot"
       style={{ display: 'flex', gap: 5, alignItems: 'center', padding: '14px 14px' }}
     >
-      {[0, 150, 300].map((delay) => (
+      {TYPING_DELAYS.map((delay) => (
         <span key={delay} className="typing-dot" style={{ animationDelay: `${delay}ms` }} />
       ))}
     </div>
   );
-}
+});
 
-function QuickPrompts({ onSelect }) {
+const QuickPrompts = memo(function QuickPrompts({ onSelect }) {
   return (
     <div style={{
       padding: '8px 14px 6px',
@@ -111,12 +113,9 @@ function QuickPrompts({ onSelect }) {
       ))}
     </div>
   );
-}
+});
 
-// ─── Logger toast notification ────────────────────────────────────────────────
-// Shows briefly when a question gets logged so Nikunj knows it's working
-
-function LoggerToast({ visible, question }) {
+const LoggerToast = memo(function LoggerToast({ visible, question }) {
   if (!visible) return null;
   return (
     <div className="logger-toast">
@@ -129,7 +128,7 @@ function LoggerToast({ visible, question }) {
       </div>
     </div>
   );
-}
+});
 
 // ─── Main component ───────────────────────────────────────────────────────────
 
@@ -142,6 +141,7 @@ export function AIBot() {
 
   const bottomRef = useRef(null);
   const inputRef = useRef(null);
+  const toastTimerRef = useRef(null);
   const { muted } = useSound();
 
   // Auto-scroll to latest message
@@ -151,22 +151,31 @@ export function AIBot() {
 
   // Focus input when panel opens
   useEffect(() => {
-    if (open) setTimeout(() => inputRef.current?.focus(), 350);
+    if (open) {
+      const id = setTimeout(() => inputRef.current?.focus(), 350);
+      return () => clearTimeout(id);
+    }
   }, [open]);
 
-  const showToast = (question) => {
+  // Cleanup toast timer on unmount
+  useEffect(() => () => clearTimeout(toastTimerRef.current), []);
+
+  const showToast = useCallback((question) => {
+    clearTimeout(toastTimerRef.current);
     setToast({ visible: true, question });
-    setTimeout(() => setToast({ visible: false, question: '' }), 4000);
-  };
+    toastTimerRef.current = setTimeout(() => setToast({ visible: false, question: '' }), 4000);
+  }, []);
 
-  const handleToggle = () => {
-    const next = !open;
-    setOpen(next);
-    if (next) sfxTransmission();
-    else sfxClick();
-  };
+  const handleToggle = useCallback(() => {
+    setOpen((prev) => {
+      const next = !prev;
+      if (next) sfxTransmission();
+      else sfxClick();
+      return next;
+    });
+  }, []);
 
-  const handleSend = (text) => {
+  const handleSend = useCallback((text) => {
     const query = (text ?? input).trim();
     if (!query || loading) return;
 
@@ -180,15 +189,11 @@ export function AIBot() {
       const { response, isFallback } = getBotResponse(query);
       setMessages((prev) => [...prev, { role: 'bot', text: response }]);
 
-      // Log unanswered questions
       if (isFallback) {
         await logUnansweredQuestion(query);
-        // Only show toast if webhook is configured
-        const { SHEETS_WEBHOOK_URL } = await import('../data');
         if (SHEETS_WEBHOOK_URL) showToast(query);
       }
 
-      // Typing sounds proportional to response length
       if (!muted) {
         const wordCount = Math.min(response.split(' ').length, 20);
         for (let i = 0; i < wordCount; i++) {
@@ -198,31 +203,32 @@ export function AIBot() {
 
       setLoading(false);
     }, delay);
-  };
+  }, [input, loading, muted, showToast]);
 
-  const handleKeyDown = (e) => {
+  const handleKeyDown = useCallback((e) => {
     if (e.key === 'Enter' && !e.shiftKey) {
       e.preventDefault();
       handleSend();
     } else {
       sfxTyping();
     }
-  };
+  }, [handleSend]);
 
-  const handleBotMessageClick = (msg) => {
+  const handleBotMessageClick = useCallback((msg) => {
     if (msg.role !== 'bot') return;
     sfxClick();
+    // Lazy-load speech only on demand
     import('../audio/engine').then(({ speakText }) => speakText(msg.text));
-  };
+  }, []);
+
+  const handleInputChange = useCallback((e) => setInput(e.target.value), []);
 
   const showQuickPrompts = messages.length <= 2;
 
   return (
     <>
-      {/* Unanswered question toast */}
       <LoggerToast visible={toast.visible} question={toast.question} />
 
-      {/* Chat panel */}
       {open && (
         <div className="bot-panel">
           <BotHeader onClose={handleToggle} />
@@ -251,7 +257,7 @@ export function AIBot() {
               className="bot-input"
               placeholder="Ask something about Nikunj..."
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={handleInputChange}
               onKeyDown={handleKeyDown}
             />
             <button
@@ -266,7 +272,6 @@ export function AIBot() {
         </div>
       )}
 
-      {/* Floating action button */}
       <button
         className="bot-fab"
         onClick={handleToggle}

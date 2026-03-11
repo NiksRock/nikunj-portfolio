@@ -1,14 +1,15 @@
-import { useRef, useState } from 'react';
+import { memo, useCallback, useRef, useState } from 'react';
 import { sfxBtn, sfxClick, speakWithCallbacks } from '../audio/engine';
 import { useReveal, useSkillBarReveal, useTypewriter } from '../hooks';
 import { useSound } from '../audio/SoundContext';
 
 // ─── Brackets ─────────────────────────────────────────────────────────────────
-export function Brackets({ color = 'var(--red)' }) {
+// Pure display — memo prevents re-render when parent updates unrelated state
+export const Brackets = memo(function Brackets({ color = 'var(--red)' }) {
   const base = { position: 'absolute', width: 13, height: 13, zIndex: 10, borderColor: color };
   const corners = {
-    tl: { ...base, top: 0, left: 0,  borderTop: '2px solid',    borderLeft: '2px solid' },
-    tr: { ...base, top: 0, right: 0, borderTop: '2px solid',    borderRight: '2px solid' },
+    tl: { ...base, top: 0, left: 0,    borderTop: '2px solid',    borderLeft: '2px solid' },
+    tr: { ...base, top: 0, right: 0,   borderTop: '2px solid',    borderRight: '2px solid' },
     bl: { ...base, bottom: 0, left: 0,  borderBottom: '2px solid', borderLeft: '2px solid' },
     br: { ...base, bottom: 0, right: 0, borderBottom: '2px solid', borderRight: '2px solid' },
   };
@@ -20,7 +21,7 @@ export function Brackets({ color = 'var(--red)' }) {
       <span style={corners.br} />
     </>
   );
-}
+});
 
 // ─── Reveal ───────────────────────────────────────────────────────────────────
 export function Reveal({ children, delay = 0, style = {}, className = '' }) {
@@ -37,13 +38,22 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
   const ref = useRef(null);
   const Tag = href ? 'a' : 'button';
 
-  const handleMouseMove = (e) => {
+  const handleMouseMove = useCallback((e) => {
     const rect = ref.current.getBoundingClientRect();
     ref.current.style.transform = `translate(
       ${(e.clientX - rect.left - rect.width / 2) * 0.25}px,
       ${(e.clientY - rect.top - rect.height / 2) * 0.25}px
     )`;
-  };
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    ref.current.style.transform = '';
+  }, []);
+
+  const handleClick = useCallback((e) => {
+    sfxClick();
+    onClick?.(e);
+  }, [onClick]);
 
   return (
     <Tag
@@ -51,8 +61,8 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
       className={`btn btn-${variant}`}
       onMouseEnter={sfxBtn}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => { ref.current.style.transform = ''; }}
-      onClick={(e) => { sfxClick(); onClick?.(e); }}
+      onMouseLeave={handleMouseLeave}
+      onClick={handleClick}
       href={href}
       style={style}
     >
@@ -62,7 +72,7 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
 }
 
 // ─── Typewriter ───────────────────────────────────────────────────────────────
-export function Typewriter({ items }) {
+export const Typewriter = memo(function Typewriter({ items }) {
   const text = useTypewriter(items);
   return (
     <span style={{ fontFamily: "'Share Tech Mono',monospace", color: 'var(--cyan)' }}>
@@ -74,10 +84,10 @@ export function Typewriter({ items }) {
       }} />
     </span>
   );
-}
+});
 
 // ─── SkillBar ─────────────────────────────────────────────────────────────────
-export function SkillBar({ label, level, delay = 0 }) {
+export const SkillBar = memo(function SkillBar({ label, level, delay = 0 }) {
   const barRef = useSkillBarReveal(level, delay);
   return (
     <div style={{ marginBottom: 14 }}>
@@ -97,10 +107,10 @@ export function SkillBar({ label, level, delay = 0 }) {
       </div>
     </div>
   );
-}
+});
 
 // ─── SectionHead ──────────────────────────────────────────────────────────────
-export function SectionHead({ sub, title }) {
+export const SectionHead = memo(function SectionHead({ sub, title }) {
   return (
     <Reveal>
       <div style={{
@@ -128,7 +138,7 @@ export function SectionHead({ sub, title }) {
       </div>
     </Reveal>
   );
-}
+});
 
 // ─── SpeakText ────────────────────────────────────────────────────────────────
 export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
@@ -136,16 +146,15 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   const [active, setActive] = useState(false);
   const text = typeof children === 'string' ? children : '';
 
-  const handleClick = (e) => {
+  const handleEnd = useCallback(() => setActive(false), []);
+
+  const handleClick = useCallback((e) => {
     e.stopPropagation();
     if (!text || muted) return;
     sfxClick();
     setActive(true);
-    speakWithCallbacks(text, {
-      onEnd: () => setActive(false),
-      onError: () => setActive(false),
-    });
-  };
+    speakWithCallbacks(text, { onEnd: handleEnd, onError: handleEnd });
+  }, [text, muted, handleEnd]);
 
   return (
     <Tag

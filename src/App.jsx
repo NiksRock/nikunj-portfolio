@@ -1,16 +1,18 @@
+import { lazy, Suspense } from 'react';
 import { SoundProvider } from './audio/SoundContext';
 import { AIBot }      from './components/AIBot';
 import { StarField }  from './components/StarField';
-import { useScrollProgress } from './hooks'; 
+import { useScrollProgress } from './hooks';
 import { Nav }        from './sections/Nav';
 import { Hero }       from './sections/Hero';
-import { Skills }     from './sections/Skills';
-import { Experience } from './sections/Experience';
-import { Projects }   from './sections/Projects';
-import { Contact }    from './sections/Contact';
-import  './styles/global.css';
-// ─── Global styles injected once ─────────────────────────────────────────────
- 
+import './styles/global.css';
+
+// Lazy-load below-the-fold sections to reduce initial bundle parse cost
+const Skills     = lazy(() => import('./sections/Skills').then(m => ({ default: m.Skills })));
+const Experience = lazy(() => import('./sections/Experience').then(m => ({ default: m.Experience })));
+const Projects   = lazy(() => import('./sections/Projects').then(m => ({ default: m.Projects })));
+const Contact    = lazy(() => import('./sections/Contact').then(m => ({ default: m.Contact })));
+
 // ─── Layout ───────────────────────────────────────────────────────────────────
 
 function PortfolioLayout() {
@@ -23,10 +25,12 @@ function PortfolioLayout() {
       <div style={{ position: 'relative', zIndex: 1 }}>
         <Nav scrollProgress={scrollProgress} />
         <Hero />
-        <Skills />
-        <Experience />
-        <Projects />
-        <Contact />
+        <Suspense fallback={null}>
+          <Skills />
+          <Experience />
+          <Projects />
+          <Contact />
+        </Suspense>
       </div>
 
       <AIBot />
@@ -38,7 +42,7 @@ function PortfolioLayout() {
 
 export default function Portfolio() {
   return (
-    <SoundProvider> 
+    <SoundProvider>
       <PortfolioLayout />
     </SoundProvider>
   );
