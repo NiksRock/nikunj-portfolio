@@ -920,7 +920,7 @@ function AIBot() {
             </div>
           )}
           <div className="bot-input-row">
-            <input className="bot-input" placeholder="ASK NEXUS-AI..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter")handleSend(); else sfxTyping(); }}/>
+            <input className="bot-input text-base" placeholder="ASK NEXUS-AI..." value={input} onChange={e=>setInput(e.target.value)} onKeyDown={e=>{ if(e.key==="Enter")handleSend(); else sfxTyping(); }}/>
             <button className="bot-send" onMouseEnter={sfxBtn} onClick={()=>handleSend()} disabled={loading}>SEND</button>
           </div>
         </div>

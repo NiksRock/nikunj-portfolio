@@ -76,6 +76,19 @@ export const GLOBAL_CSS = `
     overflow: hidden;
   }
 
+  html {
+  height: -webkit-fill-available;
+}
+
+body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+}
+
+  input,
+  textarea {
+    font-size: 16px;
+  }
   .btn {
     font-family: 'Share Tech Mono', monospace;
     font-size: 11px;
