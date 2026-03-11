@@ -646,7 +646,7 @@ function Hero() {
       <Reveal delay={250} style={{flexShrink:0}} className="hero-card-wrap">
         <div className="card" style={{width:272,height:390,border:"1px solid rgba(255,70,85,.3)"}}>
           <Brackets color="var(--red)"/>
-          <img src="./profile.PNG" alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",
+          <img src="./profile.png" alt="" style={{position:"absolute",inset:0,width:"100%",height:"100%",objectFit:"cover",
             objectPosition:"top center" ,filter:"saturate(0.5) contrast(1.2)",zIndex:0}}/>
           <div style={{position:"absolute",inset:0,background:"linear-gradient(160deg,rgba(255,70,85,.18) 0%,rgba(7,13,22,.75) 45%,rgba(7,13,22,.97) 80%,var(--surface) 100%)",zIndex:1}}/>
           <div style={{position:"absolute",inset:0,background:"repeating-linear-gradient(0deg,transparent,transparent 3px,rgba(0,0,0,.07) 3px,rgba(0,0,0,.07) 4px)",zIndex:2,pointerEvents:"none"}}/>
