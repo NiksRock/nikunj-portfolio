@@ -1,74 +1,152 @@
 <!doctype html>
 <html lang="en">
-  <head>
-  <meta charset="UTF-8" />
+<head>
 
-  <!-- Browser Tab -->
-  <title>Nikunj Patel | Senior Frontend Engineer | React Architect</title>
+<meta charset="UTF-8" />
 
-  <!-- Basic SEO -->
-  <meta name="description" content="Nikunj Patel is a Senior Frontend Engineer with 7+ years experience building scalable React applications, design systems, and high-performance web platforms." />
+<!-- Mobile -->
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 
-  <meta name="keywords" content="Nikunj Patel, Frontend Engineer, React Developer, Senior Frontend Developer, UI Engineer, JavaScript Architect, Web Performance, Design Systems" />
+<!-- Primary SEO -->
+<title>Nikunj Patel | Senior Frontend Engineer | React Architect | Micro-Frontend Expert</title>
 
-  <meta name="author" content="Nikunj Patel" />
-  <meta name="robots" content="index, follow" />
+<meta name="description"
+content="Nikunj Patel is a Senior Frontend Engineer specializing in React, Next.js, TypeScript and Micro-Frontend architecture. 7+ years building scalable enterprise platforms used by 600K+ users." />
 
-  <!-- Mobile -->
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta name="keywords"
+content="Nikunj Patel, Senior Frontend Engineer, React Architect, Micro Frontend Developer, Next.js Developer, JavaScript Engineer, TypeScript Developer, Frontend Architect, UI Engineer, Web Performance, Design Systems" />
 
-  <!-- Canonical -->
-  <link rel="canonical" href="https://nikunj.life/" />
+<meta name="author" content="Nikunj Patel" />
+<meta name="robots" content="index, follow, max-image-preview:large" />
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/png" href="/favicon.png" />
+<!-- Canonical -->
+<link rel="canonical" href="https://nikunj.life/" />
 
-  <!-- Apple -->
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+<!-- Theme -->
+<meta name="theme-color" content="#0a0f1c">
 
-  <!-- Theme -->
-  <meta name="theme-color" content="#000000" />
+<!-- Favicons -->
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon.png">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 
-  <!-- Open Graph (LinkedIn / Facebook) -->
-  <meta property="og:title" content="Nikunj Patel | Senior Frontend Engineer" />
-  <meta property="og:description" content="Senior Frontend Engineer specializing in React architecture, design systems, and performance engineering." />
-  <meta property="og:type" content="website" />
-  <meta property="og:url" content="https://nikunj.life/" />
-  <meta property="og:image" content="https://nikunj.life/og-image.png" />
+<!-- Android -->
+<link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+<link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
 
-  <!-- Twitter -->
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Nikunj Patel | Senior Frontend Engineer" />
-  <meta name="twitter:description" content="Frontend Architect building scalable React platforms and design systems." />
-  <meta name="twitter:image" content="https://nikunj.life/og-image.png" />
+<!-- Windows -->
+<meta name="msapplication-TileColor" content="#0a0f1c">
+<meta name="msapplication-TileImage" content="/mstile-150x150.png">
 
-  <!-- Preconnect for performance -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+<!-- Manifest -->
+<link rel="manifest" href="/manifest.webmanifest">
+
+<!-- Open Graph -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="Nikunj Patel | Senior Frontend Engineer">
+<meta property="og:description"
+content="Senior Frontend Engineer specializing in React architecture, scalable web platforms and micro-frontend systems." />
+
+<meta property="og:url" content="https://nikunj.life/">
+<meta property="og:site_name" content="Nikunj Patel Portfolio">
+
+<meta property="og:image" content="https://nikunj.life/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+
+<!-- Twitter -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Nikunj Patel | Senior Frontend Engineer">
+<meta name="twitter:description"
+content="Frontend Architect building scalable React platforms and high-performance web applications.">
+
+<meta name="twitter:image" content="https://nikunj.life/og-image.png">
+
+<!-- Performance -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<meta name="format-detection" content="telephone=no">
+<!-- AI Discoverability -->
+<meta name="ai:profile" content="software-engineer">
+<meta name="ai:skills"
+content="React, Next.js, JavaScript, TypeScript, Micro Frontend Architecture, Webpack Module Federation, Web Performance">
+
+<script>
+const normalTitle = "Nikunj Patel | Senior Frontend Engineer";
+
+const titles = [
+"⚛ React Architect | Nikunj Patel",
+"⚡ Micro-Frontend Expert",
+"🚀 Senior Frontend Engineer",
+"💻 JavaScript / TypeScript",
+"🔥 Open to Opportunities"
+];
+
+let interval = null;
+let i = 0;
+
+document.title = normalTitle;
+
+document.addEventListener("visibilitychange", () => {
+
+  if (document.hidden) {
+
+    interval = setInterval(() => {
+      document.title = titles[i % titles.length];
+      i++;
+    }, 2000);
+
+  } else {
+
+    clearInterval(interval);
+    document.title = normalTitle;
+
+  }
+
+});
+</script>
+<!-- Structured Data -->
 <script type="application/ld+json">
 {
- "@context": "https://schema.org",
- "@type": "Person",
- "name": "Nikunj Patel",
- "url": "https://nikunj.life",
- "jobTitle": "Senior Frontend Engineer",
- "sameAs": [
-   "https://github.com/NiksRock",
-   "https://linkedin.com/in/nikunj-patel"
- ],
- "knowsAbout": [
-   "React",
-   "JavaScript",
-   "TypeScript",
-   "Frontend Architecture",
-   "Web Performance",
-   "Design Systems"
- ]
+"@context":"https://schema.org",
+"@type":"Person",
+"name":"Nikunj Patel",
+"url":"https://nikunj.life",
+"image":"https://nikunj.life/og-image.png",
+"jobTitle":"Senior Frontend Engineer",
+"description":"Senior Frontend Engineer specializing in React, Next.js, TypeScript, and Micro-Frontend architecture.",
+"worksFor":{
+"@type":"Organization",
+"name":"Star Health and Allied Insurance"
+},
+"sameAs":[
+"https://github.com/NiksRock",
+"https://linkedin.com/in/nikunj-patel"
+],
+"knowsAbout":[
+"React",
+"Next.js",
+"TypeScript",
+"Micro Frontend Architecture",
+"Webpack Module Federation",
+"Design Systems",
+"Web Performance"
+],
+"address":{
+"@type":"PostalAddress",
+"addressLocality":"Pune",
+"addressCountry":"India"
+}
 }
 </script>
+
   <script type="module" crossorigin src="/assets/index-Da_xm8MC.js"></script>
 </head>
-  <body>
-    <div id="root"></div>
-  </body>
+
+<body>
+
+<div id="root"></div>
+
+
+</body>
 </html>
