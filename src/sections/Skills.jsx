@@ -4,43 +4,66 @@ import { Brackets, Reveal, SectionHead, SkillBar } from '../components/primitive
 
 function SkillCards() {
   return (
-    <div className="skills-cards" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16 }}>
+    <div className="skills-cards">
       {SKILLS.map((skill, i) => (
         <Reveal key={skill.id} delay={i * 70}>
           <div
             className="card"
-            style={{ padding: '18px 16px', transition: 'transform .2s, box-shadow .2s' }}
+            style={{
+              padding: '20px 18px',
+              transition: 'transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base)',
+              cursor: 'default',
+              height: '100%',
+            }}
             onMouseEnter={(e) => {
               sfxCard();
-              e.currentTarget.style.transform = 'scale(1.03)';
-              e.currentTarget.style.boxShadow = '0 0 24px rgba(255,70,85,.18)';
+              e.currentTarget.style.transform = 'translateY(-3px)';
+              e.currentTarget.style.boxShadow = '0 8px 32px rgba(255,70,85,0.18)';
+              e.currentTarget.style.borderColor = 'rgba(255,70,85,0.3)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = '';
               e.currentTarget.style.boxShadow = '';
+              e.currentTarget.style.borderColor = '';
             }}
           >
             <Brackets color="var(--red)" />
+
+            {/* ID badge */}
             <div style={{
               fontFamily: "'Share Tech Mono',monospace",
-              fontSize: 9, color: 'var(--red)', letterSpacing: 2, marginBottom: 4,
+              fontSize: 9, color: 'var(--red)',
+              letterSpacing: 2, marginBottom: 6,
             }}>
               {skill.id}
             </div>
+
+            {/* Level number */}
             <div style={{
               fontFamily: "'Rajdhani',sans-serif",
-              fontWeight: 700, fontSize: 30, color: 'var(--white)', lineHeight: 1,
+              fontWeight: 700, fontSize: 34,
+              color: 'var(--white)', lineHeight: 1,
+              marginBottom: 2,
             }}>
               {skill.level}
+              <span style={{ fontSize: 14, color: 'var(--red)', marginLeft: 2 }}>%</span>
             </div>
-            {/* Improved: was var(--muted) which was #2a3a50 — now muted-bright */}
+
+            {/* Skill name */}
             <div style={{
-              fontSize: 11, color: 'var(--muted-bright)',
-              marginBottom: 10, textTransform: 'uppercase', letterSpacing: 1,
+              fontSize: 11,
+              color: 'var(--muted-bright)',
+              marginBottom: 12,
+              textTransform: 'uppercase',
+              letterSpacing: 1,
+              fontFamily: "'Barlow',sans-serif",
+              fontWeight: 500,
             }}>
               {skill.name}
             </div>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}>
+
+            {/* Tag chips */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 5 }}>
               {skill.tags.map((tag) => (
                 <span key={tag} className="tag-chip-cyan">{tag}</span>
               ))}
@@ -55,11 +78,12 @@ function SkillCards() {
 function AccuracyMeter() {
   return (
     <Reveal delay={100}>
-      <div className="card" style={{ padding: '22px 22px 18px' }}>
+      <div className="card" style={{ padding: '22px 22px 20px' }}>
         <Brackets color="var(--cyan)" />
         <div style={{
           fontFamily: "'Share Tech Mono',monospace",
-          fontSize: 9, color: 'var(--cyan)', letterSpacing: 2, marginBottom: 16,
+          fontSize: 9, color: 'var(--cyan)',
+          letterSpacing: 2, marginBottom: 20,
         }}>
           // ACCURACY METER
         </div>
@@ -78,35 +102,48 @@ function DeploymentStats() {
         <Brackets color="var(--gold)" />
         <div style={{
           fontFamily: "'Share Tech Mono',monospace",
-          fontSize: 9, color: 'var(--gold)', letterSpacing: 2, marginBottom: 14,
+          fontSize: 9, color: 'var(--gold)',
+          letterSpacing: 2, marginBottom: 16,
         }}>
           // DEPLOYMENT STATS
         </div>
-        <div className="stats-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }}>
+        <div className="stats-grid">
           {DEPLOYMENT_STATS.map(([metric, value, color]) => (
             <div key={metric} style={{
-              background: 'rgba(2,4,8,.5)',
-              padding: '11px 13px',
+              background: 'rgba(2,4,8,0.5)',
+              padding: '12px 14px',
               borderLeft: `2px solid ${color}`,
-            }}>
-              {/* Improved: was var(--muted) — now muted-bright */}
+              transition: 'background var(--t-fast)',
+            }}
+              onMouseEnter={e => e.currentTarget.style.background = 'rgba(2,4,8,0.8)'}
+              onMouseLeave={e => e.currentTarget.style.background = 'rgba(2,4,8,0.5)'}
+            >
               <div style={{
                 fontFamily: "'Share Tech Mono',monospace",
-                fontSize: 9, color: 'var(--muted-bright)', letterSpacing: 2,
+                fontSize: 9, color: 'var(--muted-bright)',
+                letterSpacing: 2, marginBottom: 2,
               }}>
                 {metric}
               </div>
               <div style={{
                 fontFamily: "'Rajdhani',sans-serif",
-                fontWeight: 700, fontSize: 28, color,
+                fontWeight: 700, fontSize: 30, color,
+                lineHeight: 1, marginBottom: 4,
               }}>
                 {value}
               </div>
               <div style={{
                 fontFamily: "'Share Tech Mono',monospace",
-                fontSize: 8, color: '#00ff64',
+                fontSize: 8, color: 'var(--green)',
+                display: 'flex', alignItems: 'center', gap: 4,
               }}>
-                ● CONFIRMED
+                <span style={{
+                  display: 'inline-block', width: 5, height: 5,
+                  borderRadius: '50%', background: 'var(--green)',
+                  boxShadow: '0 0 6px var(--green)',
+                  animation: 'pulse-g 2s infinite',
+                }} />
+                CONFIRMED
               </div>
             </div>
           ))}
@@ -121,18 +158,17 @@ export function Skills() {
     <section
       id="skills"
       style={{
-        background: 'rgba(7,13,22,.6)',
-        borderTop: '1px solid rgba(42,58,80,.3)',
-        borderBottom: '1px solid rgba(42,58,80,.3)',
+        background: 'rgba(7,13,22,0.6)',
+        borderTop: '1px solid rgba(42,58,80,0.3)',
+        borderBottom: '1px solid rgba(42,58,80,0.3)',
       }}
     >
       <div
         className="section-inner"
-        style={{ padding: '100px 60px', maxWidth: 1280, margin: '0 auto' }}
         onMouseEnter={sfxWhoosh}
       >
         <SectionHead sub="// CLASS OVERVIEW" title="SKILL LOADOUT" />
-        <div className="skills-grid" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 32 }}>
+        <div className="skills-grid">
           <SkillCards />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             <AccuracyMeter />

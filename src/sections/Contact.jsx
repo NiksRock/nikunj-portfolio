@@ -1,13 +1,14 @@
 import { MagBtn, Reveal, SpeakText } from '../components/primitives';
+import { sfxBtn } from '../audio/engine';
 
 export function Contact() {
   return (
-    <section id="contact" style={{ borderTop: '1px solid rgba(42,58,80,.3)' }}>
+    <section id="contact" style={{ borderTop: '1px solid rgba(42,58,80,0.3)' }}>
       <div
         className="section-inner"
-        style={{ padding: '100px 60px', maxWidth: 1280, margin: '0 auto', textAlign: 'center' }}
+        style={{ textAlign: 'center' }}
       >
-        {/* Heading */}
+        {/* Section heading */}
         <Reveal>
           <div style={{
             fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--red)',
@@ -20,77 +21,121 @@ export function Contact() {
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '0 auto 10px', maxWidth: 400 }}>
             <div style={{ height: 1, flex: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
             <div style={{ width: 5, height: 5, background: 'var(--red)', transform: 'rotate(45deg)' }} />
-            <div style={{ height: 1, width: 36, background: 'rgba(255,70,85,.25)' }} />
+            <div style={{ height: 1, width: 36, background: 'rgba(255,70,85,0.25)' }} />
           </div>
-          <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 'clamp(36px,4vw,52px)', color: 'var(--white)', lineHeight: 1, marginBottom: 44 }}>
+          <div style={{
+            fontFamily: "'Rajdhani',sans-serif",
+            fontWeight: 700, fontSize: 'clamp(36px,4vw,52px)',
+            color: 'var(--white)', lineHeight: 1, marginBottom: 44,
+          }}>
             INITIATE CONTACT
           </div>
         </Reveal>
 
-        {/* Body copy */}
+        {/* Body copy + contact info */}
         <Reveal delay={100}>
           <SpeakText
             tag="p"
-            style={{ maxWidth: 450, margin: '0 auto 12px', color: 'rgba(232,240,255,.6)', lineHeight: 1.75, fontSize: 15, display: 'block' }}
+            style={{
+              maxWidth: 460, margin: '0 auto 16px',
+              color: 'var(--text-body)', lineHeight: 1.8,
+              fontSize: 15.5, display: 'block',
+            }}
           >
             Ready to discuss your next mission. Whether it's architecting a micro-frontend platform,
             scaling frontend teams, or building robust React ecosystems — let's deploy together.
           </SpeakText>
-          <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--cyan)', letterSpacing: 1, marginBottom: 36 }}>
-            nikunjpatel1581996@gmail.com &nbsp;&middot;&nbsp; +91 8980368059 &nbsp;&middot;&nbsp; Pune, India
+
+          {/* Contact details chip row */}
+          <div style={{
+            display: 'flex', gap: 20, justifyContent: 'center',
+            flexWrap: 'wrap', marginBottom: 40,
+          }}>
+            {[
+              { icon: '✉', text: 'nikunjpatel1581996@gmail.com', href: 'mailto:nikunjpatel1581996@gmail.com' },
+              { icon: '☎', text: '+91 8980368059', href: 'tel:+918980368059' },
+              { icon: '⊕', text: 'Pune, India', href: null },
+            ].map(({ icon, text, href }) => (
+              <div
+                key={text}
+                style={{
+                  display: 'flex', alignItems: 'center', gap: 7,
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: 10, color: 'var(--text-dim)',
+                  letterSpacing: 0.5,
+                }}
+              >
+                <span style={{ color: 'var(--cyan)', fontSize: 11 }}>{icon}</span>
+                {href ? (
+                  <a
+                    href={href}
+                    style={{
+                      color: 'var(--muted-bright)',
+                      textDecoration: 'none',
+                      transition: 'color 0.15s',
+                    }}
+                    onMouseEnter={e => e.currentTarget.style.color = 'var(--cyan)'}
+                    onMouseLeave={e => e.currentTarget.style.color = 'var(--muted-bright)'}
+                  >
+                    {text}
+                  </a>
+                ) : (
+                  <span>{text}</span>
+                )}
+              </div>
+            ))}
           </div>
         </Reveal>
 
-        {/* CTA buttons — resume download added as 4th button */}
+        {/* CTA buttons */}
         <Reveal delay={180}>
-          <div className="contact-btns" style={{ display: 'flex', gap: 14, justifyContent: 'center', flexWrap: 'wrap', alignItems: 'center' }}>
-            <MagBtn variant="red"   href="mailto:nikunjpatel1581996@gmail.com">SEND TRANSMISSION</MagBtn>
-            <MagBtn variant="cyan"  href="https://github.com/NiksRock">GitHub // NiksRock</MagBtn>
-            <MagBtn variant="ghost" href="https://linkedin.com/in/nikunj-patel-1aa949156">LinkedIn Profile</MagBtn>
-
-            {/* Resume — place PDF at public/resume.pdf */}
+          <div className="contact-btns">
+            <MagBtn variant="red" href="mailto:nikunjpatel1581996@gmail.com">
+              SEND TRANSMISSION
+            </MagBtn>
+            <MagBtn variant="cyan" href="https://github.com/NiksRock" target="_blank" rel="noopener noreferrer">
+              GitHub // NiksRock
+            </MagBtn>
+            <MagBtn variant="ghost" href="https://linkedin.com/in/nikunj-patel-1aa949156" target="_blank" rel="noopener noreferrer">
+              LinkedIn Profile
+            </MagBtn>
             <a
               href="/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
               download="Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                background: 'transparent',
-                color: '#f0a500',
-                border: '1px solid #f0a500',
-                fontFamily: "'Share Tech Mono',monospace",
-                fontSize: 11, letterSpacing: 2,
-                padding: '10px 22px',
-                cursor: 'pointer',
-                clipPath: 'polygon(8px 0%,100% 0%,100% calc(100% - 8px),calc(100% - 8px) 100%,0% 100%,0% 8px)',
-                textDecoration: 'none',
-                transition: 'background .2s, box-shadow .2s',
-                whiteSpace: 'nowrap',
-              }}
-              onMouseEnter={e => {
-                e.currentTarget.style.background = 'rgba(240,165,0,.1)';
-                e.currentTarget.style.boxShadow = '0 0 18px rgba(240,165,0,.35)';
-              }}
-              onMouseLeave={e => {
-                e.currentTarget.style.background = 'transparent';
-                e.currentTarget.style.boxShadow = 'none';
-              }}
+              className="btn-resume"
+              onMouseEnter={sfxBtn}
             >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
               DOWNLOAD RESUME
             </a>
           </div>
         </Reveal>
 
-        {/* Footer */}
+        {/* Divider + footer */}
         <Reveal delay={260}>
-          <div style={{ marginTop: 80, display: 'flex', alignItems: 'center', gap: 16 }}>
-            <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,var(--red))' }} />
-            <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--muted)', letterSpacing: 2 }}>
-              NP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
-            </span>
-            <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
-          </div>
-          <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'rgba(42,58,80,.4)', marginTop: 14, letterSpacing: 1 }}>
-            &copy; 2025 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
+          <div style={{ marginTop: 80 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
+              <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,var(--red))' }} />
+              <div style={{
+                fontFamily: "'Share Tech Mono',monospace",
+                fontSize: 9, color: 'var(--muted-bright)',
+                letterSpacing: 2,
+              }}>
+                NP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
+              </div>
+              <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
+            </div>
+            <div style={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: 9, color: 'rgba(42,58,80,0.6)',
+              letterSpacing: 1,
+            }}>
+              &copy; 2025 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
+            </div>
           </div>
         </Reveal>
       </div>

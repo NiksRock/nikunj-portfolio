@@ -7,10 +7,10 @@ import { useSound } from '../audio/SoundContext';
 export function Brackets({ color = 'var(--red)' }) {
   const base = { position: 'absolute', width: 13, height: 13, zIndex: 10, borderColor: color };
   const corners = {
-    tl: { ...base, top: 0, left: 0,  borderTop: '2px solid',    borderLeft: '2px solid' },
-    tr: { ...base, top: 0, right: 0, borderTop: '2px solid',    borderRight: '2px solid' },
-    bl: { ...base, bottom: 0, left: 0,  borderBottom: '2px solid', borderLeft: '2px solid' },
-    br: { ...base, bottom: 0, right: 0, borderBottom: '2px solid', borderRight: '2px solid' },
+    tl: { ...base, top: 0,    left: 0,   borderTop: '2px solid', borderLeft: '2px solid' },
+    tr: { ...base, top: 0,    right: 0,  borderTop: '2px solid', borderRight: '2px solid' },
+    bl: { ...base, bottom: 0, left: 0,   borderBottom: '2px solid', borderLeft: '2px solid' },
+    br: { ...base, bottom: 0, right: 0,  borderBottom: '2px solid', borderRight: '2px solid' },
   };
   return (
     <>
@@ -33,15 +33,15 @@ export function Reveal({ children, delay = 0, style = {}, className = '' }) {
 }
 
 // ─── MagBtn ───────────────────────────────────────────────────────────────────
-export function MagBtn({ children, variant = 'red', onClick, href, style = {} }) {
+export function MagBtn({ children, variant = 'red', onClick, href, target, rel, style = {} }) {
   const ref = useRef(null);
   const Tag = href ? 'a' : 'button';
 
   const handleMouseMove = (e) => {
     const rect = ref.current.getBoundingClientRect();
     ref.current.style.transform = `translate(
-      ${(e.clientX - rect.left - rect.width / 2) * 0.25}px,
-      ${(e.clientY - rect.top - rect.height / 2) * 0.25}px
+      ${(e.clientX - rect.left - rect.width / 2) * 0.22}px,
+      ${(e.clientY - rect.top - rect.height / 2) * 0.22}px
     )`;
   };
 
@@ -54,6 +54,8 @@ export function MagBtn({ children, variant = 'red', onClick, href, style = {} })
       onMouseLeave={() => { ref.current.style.transform = ''; }}
       onClick={(e) => { sfxClick(); onClick?.(e); }}
       href={href}
+      target={target}
+      rel={rel}
       style={style}
     >
       {children}
@@ -70,7 +72,7 @@ export function Typewriter({ items }) {
       <span style={{
         display: 'inline-block', width: 2, height: '1em',
         background: 'var(--cyan)', marginLeft: 3,
-        verticalAlign: 'middle', animation: 'blink .8s infinite',
+        verticalAlign: 'middle', animation: 'blink 0.8s infinite',
       }} />
     </span>
   );
@@ -80,19 +82,34 @@ export function Typewriter({ items }) {
 export function SkillBar({ label, level, delay = 0 }) {
   const barRef = useSkillBarReveal(level, delay);
   return (
-    <div style={{ marginBottom: 14 }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 5 }}>
+    <div style={{ marginBottom: 16 }}>
+      <div style={{
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 6,
+      }}>
         <span style={{
           fontFamily: "'Share Tech Mono',monospace",
-          fontSize: 11, color: 'var(--muted-bright)', letterSpacing: 1,
+          fontSize: 11, color: 'var(--muted-bright)',
+          letterSpacing: 0.8,
         }}>
           {label}
         </span>
-        <span style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 11, color: 'var(--red)' }}>
+        <span style={{
+          fontFamily: "'Share Tech Mono',monospace",
+          fontSize: 11, color: 'var(--red)',
+          fontWeight: 600,
+        }}>
           {level}%
         </span>
       </div>
-      <div style={{ height: 3, background: 'rgba(42,58,80,.4)', borderRadius: 2 }}>
+      <div style={{
+        height: 3,
+        background: 'rgba(42,58,80,0.4)',
+        borderRadius: 2,
+        overflow: 'hidden',
+      }}>
         <div ref={barRef} className="sk-bar" />
       </div>
     </div>
@@ -103,26 +120,49 @@ export function SkillBar({ label, level, delay = 0 }) {
 export function SectionHead({ sub, title }) {
   return (
     <Reveal>
+      {/* Sub label */}
       <div style={{
         fontFamily: "'Share Tech Mono',monospace",
-        fontSize: 11, color: 'var(--red)', letterSpacing: 3,
-        marginBottom: 8, display: 'flex', alignItems: 'center', gap: 10,
+        fontSize: 11, color: 'var(--red)',
+        letterSpacing: 3, marginBottom: 10,
+        display: 'flex', alignItems: 'center', gap: 10,
       }}>
-        <span style={{ display: 'inline-block', width: 3, height: 16, background: 'var(--red)' }} />
+        <span style={{
+          display: 'inline-block', width: 3, height: 16,
+          background: 'var(--red)',
+        }} />
         {sub}
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '0 0 10px' }}>
-        <div style={{ height: 1, flex: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
-        <div style={{ width: 5, height: 5, background: 'var(--red)', transform: 'rotate(45deg)' }} />
-        <div style={{ height: 1, width: 36, background: 'rgba(255,70,85,.25)' }} />
+
+      {/* Decorative divider */}
+      <div style={{
+        display: 'flex', alignItems: 'center',
+        gap: 12, margin: '0 0 12px',
+      }}>
+        <div style={{
+          height: 1, flex: 1,
+          background: 'linear-gradient(90deg,var(--red),transparent)',
+        }} />
+        <div style={{
+          width: 5, height: 5,
+          background: 'var(--red)',
+          transform: 'rotate(45deg)',
+        }} />
+        <div style={{
+          height: 1, width: 36,
+          background: 'rgba(255,70,85,0.25)',
+        }} />
       </div>
+
+      {/* Section title */}
       <div style={{
         fontFamily: "'Rajdhani',sans-serif",
         fontWeight: 700,
         fontSize: 'clamp(36px,4vw,52px)',
         color: 'var(--white)',
         lineHeight: 1,
-        marginBottom: 48,
+        marginBottom: 52,
+        letterSpacing: '-0.5px',
       }}>
         {title}
       </div>
@@ -131,7 +171,6 @@ export function SectionHead({ sub, title }) {
 }
 
 // ─── SpeakText ────────────────────────────────────────────────────────────────
-// FIXED: clicking while active now STOPS speech instead of ignoring the click.
 export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
   const { muted } = useSound();
   const [active, setActive] = useState(false);
@@ -141,14 +180,12 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
     e.stopPropagation();
     if (!text || muted) return;
 
-    // ── Already speaking → cancel and reset ──────────────────────────────────
     if (active) {
       window.speechSynthesis?.cancel();
       setActive(false);
       return;
     }
 
-    // ── Start speaking ────────────────────────────────────────────────────────
     sfxClick();
     setActive(true);
     speakWithCallbacks(text, {
@@ -165,7 +202,7 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
         cursor: text && !muted ? 'pointer' : 'inherit',
         borderBottom: active ? '1px solid var(--cyan)' : '1px solid transparent',
         color: active ? 'var(--cyan)' : 'inherit',
-        transition: 'color .2s, border-color .2s',
+        transition: 'color 0.2s, border-color 0.2s',
         ...style,
       }}
     >
@@ -173,7 +210,7 @@ export function SpeakText({ children, style = {}, tag: Tag = 'span' }) {
       {active && (
         <span style={{
           marginLeft: 6, fontSize: '0.72em',
-          color: 'var(--cyan)', animation: 'blink .55s infinite',
+          color: 'var(--cyan)', animation: 'blink 0.55s infinite',
           fontFamily: "'Share Tech Mono',monospace",
           letterSpacing: 1,
         }}>
