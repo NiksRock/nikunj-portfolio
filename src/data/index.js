@@ -482,6 +482,46 @@ export const BOT_KNOWLEDGE_BASE = {
     "That one's outside what I know. Try asking about his background, the systems he's built, or how to get in touch.",
     "Not quite sure what you're after — feel free to rephrase! I can cover his skills, career, projects, availability, or contact details.",
   ],
+  salary: {
+  keywords: [
+    "salary",
+    "ctc",
+    "salary expectation",
+    "expected salary",
+    "compensation",
+    "package",
+    "pay",
+    "how much salary",
+    "salary range",
+    "salary expectation nikunj",
+    "expected ctc"
+  ],
+  responses: [
+    "Nikunj is open to discussing compensation depending on the role, scope, and team. For the right senior frontend or architecture role, he's happy to align with market standards.",
+    
+    "Compensation is flexible and depends on the role and responsibilities. For senior frontend architecture roles, he's open to discussing competitive market packages.",
+    
+    "He's open to discussing salary based on the opportunity, team, and impact of the role. Best approach is to connect with him directly to discuss details."
+  ]
+},
+challenges: {
+  keywords: [
+    "challenge",
+    "difficult",
+    "difficulty",
+    "problem",
+    "hard part",
+    "biggest challenge",
+    "issues"
+  ],
+  responses: [
+    "One of the biggest challenges he tackled was designing a micro-frontend platform where multiple teams could deploy independently without breaking shared dependencies. Solving that required careful Module Federation configuration and shared package strategy.",
+
+    "Scaling frontend architecture for hundreds of thousands of users can be tricky. At Star Health he solved this by splitting the platform into independently deployable micro-frontends and building shared libraries distributed through AWS CodeArtifact.",
+
+    "Large enterprise frontend systems often suffer from coupling between teams. Nikunj focused on solving that by designing shared UI packages, automated quality gates, and clear architecture boundaries."
+  ]
+},
 };
 
 // ─── Typewriter strings ───────────────────────────────────────────────────────
