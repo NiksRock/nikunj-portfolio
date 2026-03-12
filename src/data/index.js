@@ -167,175 +167,242 @@ export const BOT_QUICK_PROMPTS = [
  * Responses are conversational and human-sounding.
  */
 export const BOT_KNOWLEDGE_BASE = {
-  greeting: {
-    keywords: ['hi', 'hello', 'hey', 'sup', 'howdy', 'yo', 'greetings', 'good morning', 'good afternoon'],
-    responses: [
-      "Hey! Welcome to Nikunj's portfolio. I'm here to help you learn about his work — feel free to ask about his skills, projects, or whether he's available for new opportunities.",
-      "Hi there! Happy to tell you about Nikunj. He's a Senior Frontend Engineer with 7 years of experience, currently working at Star Health Insurance in Pune. What would you like to know?",
-      "Hello! I can walk you through Nikunj's background, projects, tech stack, or help you figure out if he'd be a good fit for your team. What's on your mind?",
-    ],
-  },
-  who: {
-    keywords: ['who is', 'who are', 'about nikunj', 'tell me about', 'introduce', 'summary', 'overview'],
-    responses: [
-      "Nikunj Patel is a Senior Frontend Engineer based in Pune, India, with 7 years of experience building enterprise-scale web platforms. He's currently SDE-3 at Star Health Insurance, where he led the architecture of a micro-frontend platform that serves 600K insurance agents. His main strengths are React, Next.js, TypeScript, and Webpack Module Federation.",
-      "In short — Nikunj is a frontend specialist who's spent the last 7 years shipping production-grade React applications. What sets him apart is his deep focus on micro-frontend architecture and building scalable component systems. He's currently at Star Health Insurance leading frontend development for a platform used by 600,000 agents.",
-    ],
-  },
-  skills: {
-    keywords: ['skill', 'tech', 'technology', 'stack', 'tools', 'expertise', 'proficient', 'know', 'languages', 'frameworks', 'what can'],
-    responses: [
-      "Nikunj's core stack:\n\n• JavaScript / TypeScript — day-to-day languages\n• React & Next.js — his primary frameworks for 6+ years\n• Webpack Module Federation — his specialty for micro-frontend architecture\n• Redux & Redux-Saga — state management at scale\n• Material UI + Storybook — component-driven UI development\n• AWS — Amplify, S3, CloudFront, EC2, CodeArtifact\n• Testing — Jest, React Testing Library, SonarQube, Snyk\n\nHe's most confident in frontend architecture decisions and building systems that multiple teams can work on simultaneously.",
-      "Beyond just 'knowing React', Nikunj specializes in frontend architecture — specifically how to structure large applications that multiple teams can build independently using Module Federation. He's also strong on the tooling side: CI/CD, code quality gates, and building shared component systems that don't become a maintenance headache.",
-    ],
-  },
-  experience: {
-    keywords: ['experience', 'work history', 'career', 'companies', 'worked', 'employment', 'years', 'how long'],
-    responses: [
-      "Nikunj has 7 years of frontend experience across four companies:\n\n1. Star Health Insurance (Apr 2023–Present) — SDE-3, leading micro-frontend architecture\n2. AltezzaSys Systems (Mar–Nov 2022) — building health-tech dashboards for BSWHealth\n3. TechAvidus (Feb 2020–Feb 2022) — full-stack product development with React\n4. Lodestone (Jan–Dec 2019) — his first role, building internal tools and dashboards\n\nHe's spent most of his career in product/platform roles rather than agency work, so he's used to owning things long-term.",
-    ],
-  },
-  current: {
-    keywords: ['current', 'currently', 'now', 'present', 'latest', 'star health', 'atom portal'],
-    responses: [
-      "Right now, Nikunj is SDE-3 at Star Health & Allied Insurance in Pune (since April 2023). He's been leading the ATOM Portal — a micro-frontend platform built with Webpack Module Federation that 600K insurance agents rely on across multiple business channels. He also introduced shared tooling across the 10-engineer team, including Storybook component libraries and automated quality gates.",
-    ],
-  },
-  microfrontend: {
-    keywords: ['micro frontend', 'microfrontend', 'micro-frontend', 'module federation', 'webpack', 'mfe', 'architecture'],
-    responses: [
-      "Micro-frontend architecture is genuinely Nikunj's strongest area. At Star Health, he designed and built a system where 4 separate React/Next.js apps are deployed independently but share a common Module Federation runtime. Teams can ship features without coordinating deployments, and shared UI packages are distributed through AWS CodeArtifact so everyone stays in sync without copy-pasting code.\n\nIt's a real production setup serving 600K users — not just a side project or experiment.",
-      "He's spent the last couple of years deep in Module Federation — figuring out how to split large React codebases into independently deployable units that still feel like one coherent product to users. That includes handling shared dependencies, routing between micro-apps, and keeping a team of 10 engineers productive without stepping on each other.",
-    ],
-  },
-  projects: {
-    keywords: ['project', 'projects', 'built', 'developed', 'growpro', 'claims', 'atom', 'qvision', 'what has he made'],
-    responses: [
-      "Here are the main things Nikunj has shipped:\n\n• ATOM Portal — 4-app MFE platform at Star Health, 600K users\n• GrowPro — marketing campaign tool that gave 600K agents a drag-and-drop poster creator; drove 40–55% engagement lift\n• @star-ui/atom-claims-ui — internal npm package covering the entire claims workflow UI (20+ components, 0 breaking changes)\n• QVision — a CI pipeline monitoring dashboard he built at Lodestone\n\nMost of his projects are internal enterprise tools that don't have public URLs, but I can go deeper on any of them.",
-    ],
-  },
-  growpro: {
-    keywords: ['growpro', 'marketing', 'campaign', 'poster', 'drag and drop'],
-    responses: [
-      "GrowPro is one of his more interesting projects — it's a marketing platform he built at Star Health that lets 600K insurance agents create personalized campaign materials without needing a designer. The core of it was a drag-and-drop poster editor using react-draggable, with dynamic templates that pull in real agent data at runtime. It exports to PDF via Next.js API routes and manages 100K+ campaign assets on S3. The result was a 40–55% jump in agent engagement with marketing materials.",
-    ],
-  },
-  education: {
-    keywords: ['education', 'degree', 'study', 'college', 'university', 'qualification', 'msc', 'bca'],
-    responses: [
-      "Nikunj has a Master's in ICT from J.P. Dawer Institute (VNSGU, 2017–2019) and a BCA from M.K. Institute of Computer Studies (VNSGU, 2014–2017). Both from Veer Narmad South Gujarat University.",
-    ],
-  },
-  contact: {
-    keywords: ['contact', 'email', 'phone', 'reach', 'hire', 'linkedin', 'github', 'connect', 'number'],
-    responses: [
-      "Here's how to reach Nikunj:\n\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156\n💻 github.com/NiksRock\n\nEmail or LinkedIn tends to get the fastest response.",
-    ],
-  },
-  availability: {
-    keywords: ['available', 'availability', 'hire', 'hiring', 'open to work', 'job', 'opportunity', 'looking', 'open to'],
-    responses: [
-      "Yes, Nikunj is open to new opportunities! He's based in Pune but open to discussing remote roles or relocation depending on the opportunity. Best way to reach him is directly:\n\n📧 nikunjpatel1581996@gmail.com\n📞 +91 8980368059\n💼 linkedin.com/in/nikunj-patel-1aa949156",
-      "He's actively exploring what's next. If you're looking for a senior frontend engineer with real micro-frontend architecture experience and a track record at scale, it's worth reaching out. Drop him a message at nikunjpatel1581996@gmail.com.",
-    ],
-  },
-  aws: {
-    keywords: ['aws', 'amazon', 'cloud', 'amplify', 's3', 'cloudfront', 'ec2', 'infrastructure', 'deployment'],
-    responses: [
-      "On the cloud side, Nikunj primarily works with AWS. His regular toolkit includes Amplify for CI/CD-connected hosting, S3 for asset storage, CloudFront as a CDN, EC2 for backend APIs, and CodeArtifact for distributing private npm packages to his team. It's a practical setup built around frontend needs rather than deep DevOps work.",
-    ],
-  },
-  storybook: {
-    keywords: ['storybook', 'component library', 'design system', 'ui components', 'reusable'],
-    responses: [
-      "Storybook has been a constant in Nikunj's work. At Star Health he built a 20+ component library that's used across all 4 ATOM apps, and he did something similar at AltezzaSys for the BSWHealth platform. His approach is component-first — design in isolation, document in Storybook, then compose into features. It keeps things consistent and makes onboarding new engineers much faster.",
-    ],
-  },
-  location: {
-    keywords: ['location', 'where', 'city', 'country', 'based', 'india', 'pune', 'remote', 'relocate'],
-    responses: [
-      "Nikunj is based in Pune, India. He's open to remote roles and can discuss relocation for the right opportunity. Reach him at nikunjpatel1581996@gmail.com to talk specifics.",
-    ],
-  },
-  salary: {
-    keywords: ['salary', 'ctc', 'compensation', 'pay', 'rate', 'package', 'cost', 'budget'],
-    responses: [
-      "I don't have details on compensation expectations — that's best discussed directly with Nikunj. You can reach him at nikunjpatel1581996@gmail.com or +91 8980368059.",
-    ],
-  },
-  notice: {
-    keywords: ['notice period', 'notice', 'joining', 'when can', 'start date', 'available from'],
-    responses: [
-      "I don't have specifics on his notice period or earliest joining date. Worth asking him directly — nikunjpatel1581996@gmail.com or +91 8980368059.",
-    ],
-  },
-  fallback: [
-    "Hmm, I'm not sure I have a good answer for that. I'm mainly set up to talk about Nikunj's skills, projects, work history, and availability. Could you rephrase, or try one of the quick prompts below?",
-    "That one's a bit outside what I know well. I can tell you about Nikunj's tech stack, career history, specific projects, or how to get in touch. What would be most useful?",
-    "I don't have enough context to answer that confidently. If it's about Nikunj's background or work, try asking it a different way — or reach out to him directly at nikunjpatel1581996@gmail.com.",
-    "Not quite sure how to help with that. I'm best at answering questions about Nikunj's frontend engineering experience, skills, and availability for new roles.",
-  ],
-  specialty: {
-  keywords: [
-    'specialty',
-    'specialisation',
-    'strength',
-    'what is nikunj good at',
-    "nikunj's specialty",
-    'main expertise',
-    'core expertise'
-  ],
-  responses: [
-    "Nikunj's strongest area is frontend architecture — particularly building scalable React platforms using micro-frontend architecture with Webpack Module Federation. He's spent several years designing systems where multiple teams can build and deploy independently while still sharing UI components.",
-    "His main specialty is large-scale React architecture. At Star Health he designed a micro-frontend platform used by 600K insurance agents, enabling multiple teams to ship features independently while sharing a unified component system.",
-  ],
+
+greeting:{
+keywords:[
+'hi','hello','hey','good morning','good afternoon','good evening','yo','start','portfolio'
+],
+responses:[
+"Hi! I'm Nikunj's portfolio assistant. I can help you understand his experience, projects, and technical strengths.",
+"Hello! If you're evaluating Nikunj as a candidate, I can walk you through his skills, architecture experience, and major projects.",
+"Hey there 👋 Feel free to ask about Nikunj's background, tech stack, leadership experience, or whether he'd be a good fit for your team."
+]
 },
 
-difficulty: {
-  keywords: [
-    'difficulty',
-    'challenge',
-    'problem',
-    'hard',
-    'issue',
-    'what problem',
-    'difficult he facing'
-  ],
-  responses: [
-    "One of the key challenges Nikunj has tackled is scaling frontend development across multiple teams. At Star Health, he solved this by implementing a micro-frontend architecture with shared component libraries so teams could ship independently without breaking each other's work.",
-    "A common challenge in Nikunj's projects is managing large enterprise UI systems used by hundreds of thousands of users. He addresses this through modular architecture, reusable component systems, and strict code quality practices."
-  ],
+who:{
+keywords:[
+'who is nikunj','about nikunj','tell me about nikunj','profile','summary','background','overview'
+],
+responses:[
+"Nikunj Patel is a Senior Frontend Engineer with 7+ years of experience building enterprise web platforms using React, Next.js, and TypeScript. He specializes in micro-frontend architecture and scalable UI systems. Currently he works as an SDE-3 at Star Health Insurance in Pune.",
+"Nikunj focuses on building scalable frontend systems. His recent work involves designing a micro-frontend architecture supporting multiple independent applications used by over 600K insurance agents."
+]
 },
 
-candidate: {
-  keywords: [
-    'candidate',
-    'how is nikunj',
-    'good candidate',
-    'should we hire',
-    'fit for role',
-    'evaluation'
-  ],
-  responses: [
-    "Nikunj is considered a strong frontend engineering candidate, especially for teams building complex React applications. His experience includes architecting micro-frontend platforms, building reusable component systems, and delivering production software used by hundreds of thousands of users.",
-    "If you're looking for a senior frontend engineer who can both code and design scalable architecture, Nikunj is a solid candidate. His background includes 7+ years of React development and leading frontend architecture for enterprise platforms."
-  ],
+architecture:{
+keywords:[
+'architecture','system design','frontend architecture','architecture experience',
+'microfrontend','module federation','scalable frontend'
+],
+responses:[
+"Nikunj has strong experience designing scalable frontend architecture. At Star Health Insurance he architected a micro-frontend platform using Webpack Module Federation that allows multiple React applications to be deployed independently while still sharing a common design system and runtime.",
+"He focuses on modular UI architecture, component libraries, and micro-frontend platforms. His architecture enables teams to ship features independently while maintaining consistency across large enterprise systems."
+]
 },
 
-abuse: {
-  keywords: [
-    'stupid',
-    'idiot',
-    'dumb',
-    'useless',
-    'trash'
-  ],
-  responses: [
-    "Haha, fair enough 😄. If you have questions about Nikunj's work or projects, I'm happy to help.",
-    "I'll take that as feedback 😅. Let me know if you'd like to know more about Nikunj's experience, skills, or projects."
-  ],
+projects:{
+keywords:[
+'projects','what projects','major work','what has he built','portfolio','products'
+],
+responses:[
+`Some of the major systems Nikunj has contributed to include:
+
+ATOM Portal  
+A micro-frontend insurance distribution platform supporting multiple business channels used by over 600K agents.
+
+GrowPro Marketing Platform  
+A campaign management system where agents generate marketing posters using a drag-and-drop editor and dynamic templates.
+
+Claims UI Platform  
+Reusable UI modules supporting claims intake, review, and settlement workflows.
+
+QVision Dashboard  
+A CI pipeline monitoring dashboard built earlier in his career to visualize automation results and test coverage.`
+]
 },
-};
+
+leadership:{
+keywords:[
+'lead','leadership','mentor','team','management','project leadership'
+],
+responses:[
+"Nikunj regularly contributes to architectural decisions and helps guide frontend development practices. He has introduced reusable component libraries, standardized development workflows, and code quality checks that improve collaboration across teams.",
+"He works closely with backend engineers, product managers, and operations teams to define API contracts and system workflows."
+]
+},
+
+skills:{
+keywords:[
+'skills','tech stack','technologies','tools','frameworks','languages'
+],
+responses:[
+`Nikunj's primary technology stack includes:
+
+Languages
+• JavaScript (ES6+)
+• TypeScript
+
+Frameworks
+• React
+• Next.js
+
+State Management
+• Redux
+• Redux Toolkit
+• Redux-Saga
+
+Architecture
+• Micro-Frontends
+• Webpack Module Federation
+• Component Libraries
+• Design Systems
+
+UI Development
+• Material UI
+• Storybook
+• Responsive and accessible UI
+
+Testing
+• Jest
+• React Testing Library
+
+Infrastructure
+• AWS Amplify
+• S3
+• CloudFront
+• EC2`
+]
+},
+
+specialization:{
+keywords:[
+'specialize','specialty','core expertise','main strength','focus'
+],
+responses:[
+"Nikunj specializes in frontend architecture for large React applications. His strongest area is designing micro-frontend systems that allow multiple teams to build and deploy features independently.",
+"He also focuses heavily on reusable component systems, performance optimization, and scalable UI architecture."
+]
+},
+
+candidate:{
+keywords:[
+'good candidate','hire nikunj','should we hire','candidate evaluation','fit for role'
+],
+responses:[
+"Nikunj would be a strong candidate for teams building complex React applications or enterprise platforms. He brings both strong coding ability and architecture experience, which is valuable for senior frontend roles.",
+"If your team needs someone who can design scalable frontend systems and guide best practices while still being hands-on with development, Nikunj would be a good fit."
+]
+},
+
+team:{
+keywords:[
+'team fit','team environment','what team','work style','collaboration'
+],
+responses:[
+"Nikunj works best in product-focused engineering teams where collaboration between frontend, backend, and product teams is important.",
+"He enjoys working in environments where architecture decisions matter and teams value clean code, reusable components, and scalable systems."
+]
+},
+
+problem_solving:{
+keywords:[
+'challenge','problem','difficulty','complex problem'
+],
+responses:[
+"One challenge Nikunj has solved is enabling multiple frontend teams to work on the same platform without blocking each other. He addressed this using micro-frontend architecture and shared component systems.",
+"He often works on systems that require balancing performance, scalability, and maintainability across large codebases."
+]
+},
+
+hr_questions:{
+keywords:[
+'hr questions','interview','screening questions','recruiter questions'
+],
+responses:[
+`Common HR questions Nikunj answers well:
+
+Why are you looking for new opportunities?
+"I enjoy building scalable frontend systems and I'm always interested in opportunities where I can contribute to impactful platforms and work with strong engineering teams."
+
+What motivates you?
+"I enjoy solving complex UI problems and designing frontend systems that help teams move faster."
+
+What are your strengths?
+"My strengths include React architecture, scalable UI design, and improving engineering workflows."
+
+What are your weaknesses?
+"I tend to spend extra time refining architecture decisions because I care about long-term maintainability."`
+]
+},
+
+behavioral:{
+keywords:[
+'behavioral','team conflict','leadership example','challenge example'
+],
+responses:[
+`Example behavioral answers:
+
+Tell me about a challenging project  
+"I worked on building a micro-frontend architecture for an insurance platform serving hundreds of thousands of users. The challenge was ensuring independent deployments while maintaining shared UI standards."
+
+How do you handle disagreements in a team?
+"I prefer discussing trade-offs openly and focusing on what's best for the product rather than individual preferences."
+
+How do you ensure code quality?
+"I rely on automated checks, code reviews, testing, and shared component systems."`
+]
+},
+
+availability:{
+keywords:[
+'available','open to work','job','opportunity','hire'
+],
+responses:[
+"Nikunj is open to discussing new opportunities including remote roles and roles based in India.",
+"If you'd like to discuss opportunities, the best way is to reach him directly via email or LinkedIn."
+]
+},
+
+contact:{
+keywords:[
+'contact','email','linkedin','github','phone'
+],
+responses:[
+`You can reach Nikunj here:
+
+Email: nikunjpatel1581996@gmail.com  
+Phone: +91 8980368059  
+LinkedIn: linkedin.com/in/nikunj-patel-1aa949156  
+GitHub: github.com/NiksRock`
+]
+},
+
+smalltalk:{
+keywords:[
+'ok','thanks','good','bye'
+],
+responses:[
+"Happy to help! Let me know if you'd like to know more about Nikunj's work.",
+"Thanks for visiting Nikunj's portfolio."
+]
+},
+
+abuse:{
+keywords:[
+'stupid','idiot','dumb','useless'
+],
+responses:[
+"Haha 😄 I'll take that as feedback. Let me know if you'd like to know about Nikunj's experience or projects.",
+"No worries! If you're evaluating Nikunj as a candidate, I'm here to help."
+]
+},
+
+fallback:[
+"I'm not sure I fully understood that question. I can help with Nikunj's experience, skills, projects, or availability.",
+"If you're evaluating Nikunj as a candidate, feel free to ask about his architecture experience, projects, or technical skills."
+]
+
+}
 
 // ─── Typewriter strings ───────────────────────────────────────────────────────
 
