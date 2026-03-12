@@ -1,17 +1,11 @@
 import { useEffect, useRef, useState } from 'react';
 
 // ─── useReveal ────────────────────────────────────────────────────────────────
-/**
- * Attaches an IntersectionObserver to the returned ref.
- * Adds the 'vis' class once the element enters the viewport.
- */
 export function useReveal(delay = 0) {
   const ref = useRef(null);
-
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -22,108 +16,104 @@ export function useReveal(delay = 0) {
       },
       { threshold: 0.06 }
     );
-
     observer.observe(el);
     return () => observer.disconnect();
   }, [delay]);
-
   return ref;
 }
 
 // ─── useScrollProgress ────────────────────────────────────────────────────────
-/**
- * Returns a 0–100 value representing how far the user has scrolled.
- */
 export function useScrollProgress() {
   const [progress, setProgress] = useState(0);
-
   useEffect(() => {
     const handleScroll = () => {
       const el = document.documentElement;
       const scrollable = el.scrollHeight - el.clientHeight;
       setProgress(scrollable > 0 ? (el.scrollTop / scrollable) * 100 : 0);
     };
-
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-
   return progress;
 }
 
 // ─── useScrolled ──────────────────────────────────────────────────────────────
-/**
- * Returns true when the page has scrolled past the given threshold (px).
- */
 export function useScrolled(threshold = 20) {
   const [scrolled, setScrolled] = useState(false);
-
   useEffect(() => {
     const handle = () => setScrolled(window.scrollY > threshold);
     window.addEventListener('scroll', handle, { passive: true });
     return () => window.removeEventListener('scroll', handle);
   }, [threshold]);
-
   return scrolled;
 }
 
 // ─── useTypewriter ────────────────────────────────────────────────────────────
 /**
- * Cycles through an array of strings with a typewriter animation.
- * Uses a single ref-based phase object to avoid stale closure issues
- * and prevent multiple simultaneous timers on rapid state updates.
+ * FIX: React 19 / StrictMode drops no-op setState calls (setText(t => t)).
+ * Solution: track phase explicitly as state so every transition is a real
+ * state change and the effect re-runs reliably.
+ *
+ * State shape:
+ *   { text: string, itemIndex: number, isTyping: boolean }
  */
-export function useTypewriter(items, { typeSpeed = 65, deleteSpeed = 28, pauseMs = 1600 } = {}) {
-  const [text, setText] = useState('');
-  const phase = useRef({ itemIndex: 0, isTyping: true });
+export function useTypewriter(
+  items,
+  { typeSpeed = 65, deleteSpeed = 28, pauseMs = 1600 } = {}
+) {
+  const [state, setState] = useState({
+    text: '',
+    itemIndex: 0,
+    isTyping: true,
+  });
 
   useEffect(() => {
-    const { itemIndex, isTyping } = phase.current;
+    const { text, itemIndex, isTyping } = state;
     const target = items[itemIndex];
     let timer;
 
     if (isTyping) {
       if (text.length < target.length) {
-        timer = setTimeout(
-          () => setText(target.slice(0, text.length + 1)),
-          typeSpeed + Math.random() * 40
-        );
-      } else {
+        // Type next character
         timer = setTimeout(() => {
-          phase.current.isTyping = false;
-          setText((t) => t); // trigger re-render to enter delete phase
+          setState(s => ({ ...s, text: target.slice(0, s.text.length + 1) }));
+        }, typeSpeed + Math.random() * 40);
+      } else {
+        // Finished typing — pause then switch to deleting
+        timer = setTimeout(() => {
+          setState(s => ({ ...s, isTyping: false }));
         }, pauseMs);
       }
     } else {
       if (text.length > 0) {
-        timer = setTimeout(() => setText((t) => t.slice(0, -1)), deleteSpeed);
+        // Delete one character
+        timer = setTimeout(() => {
+          setState(s => ({ ...s, text: s.text.slice(0, -1) }));
+        }, deleteSpeed);
       } else {
-        phase.current.itemIndex = (itemIndex + 1) % items.length;
-        phase.current.isTyping = true;
-        setText('');
+        // Finished deleting — advance to next item, start typing
+        setState(s => ({
+          text: '',
+          itemIndex: (s.itemIndex + 1) % items.length,
+          isTyping: true,
+        }));
       }
     }
 
     return () => clearTimeout(timer);
-  }, [text, items, typeSpeed, deleteSpeed, pauseMs]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
 
-  return text;
+  return state.text;
 }
 
 // ─── useSkillBarReveal ────────────────────────────────────────────────────────
-/**
- * Animates a skill bar width to `level`% once the element is in view.
- * Returns a ref to attach to the bar element itself.
- */
 export function useSkillBarReveal(level, delay = 0) {
   const barRef = useRef(null);
-
   useEffect(() => {
     const bar = barRef.current;
     if (!bar) return;
-
     const target = bar.parentElement?.parentElement || bar;
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -135,10 +125,8 @@ export function useSkillBarReveal(level, delay = 0) {
       },
       { threshold: 0.2 }
     );
-
     observer.observe(target);
     return () => observer.disconnect();
   }, [level, delay]);
-
   return barRef;
 }

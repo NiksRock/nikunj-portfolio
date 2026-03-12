@@ -1,27 +1,34 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useState } from 'react';
 import { sfxBtn, sfxClick } from '../audio/engine';
 import { useSound } from '../audio/SoundContext';
 import { useScrolled } from '../hooks';
 import { NAV_LINKS } from '../data';
 import { MagBtn } from '../components/primitives';
 
-// ─── Sound Toggle Button ──────────────────────────────────────────────────────
-
+// ─── Sound Toggle ─────────────────────────────────────────────────────────────
 const SoundToggle = memo(function SoundToggle({ muted, onToggle }) {
   return (
     <button
       onClick={onToggle}
       title={muted ? 'Unmute interaction sounds & voice' : 'Mute all sounds'}
+      aria-label={muted ? 'Unmute' : 'Mute'}
       style={{
         background: 'none',
         border: '1px solid',
-        borderColor: muted ? 'rgba(42,58,80,.5)' : 'rgba(255,70,85,.4)',
-        color: muted ? 'var(--muted)' : 'var(--red)',
+        borderColor: muted ? 'rgba(42,58,80,0.5)' : 'rgba(255,70,85,0.4)',
+        color: muted ? 'var(--muted-bright)' : 'var(--red)',
         width: 32, height: 32,
         cursor: 'pointer',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         clipPath: 'var(--clip-sm)',
-        transition: 'all .2s',
+        transition: 'all 0.2s',
+        flexShrink: 0,
+      }}
+      onMouseEnter={e => {
+        if (!muted) e.currentTarget.style.background = 'rgba(255,70,85,0.1)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.background = 'none';
       }}
     >
       {muted ? (
@@ -41,31 +48,28 @@ const SoundToggle = memo(function SoundToggle({ muted, onToggle }) {
   );
 });
 
-// ─── Nav link — isolated to prevent full nav re-render on hover ───────────────
-
-const NavLink = memo(function NavLink({ label, href,download=false }) {
-  const handleMouseOver = useCallback((e) => {
-    e.target.style.color = 'var(--white)';
-    e.target.style.textShadow = '0 0 12px var(--red)';
-  }, []);
-
-  const handleMouseOut = useCallback((e) => {
-    e.target.style.color = 'var(--muted)';
-    e.target.style.textShadow = 'none';
-  }, []);
-
+// ─── Nav link ─────────────────────────────────────────────────────────────────
+const NavLink = memo(function NavLink({ label, href, download = false }) {
   return (
     <a
       href={href}
-      download={download}
+      download={download || undefined}
       onMouseEnter={sfxBtn}
-      onMouseOver={handleMouseOver}
-      onMouseOut={handleMouseOut}
       style={{
         fontFamily: "'Share Tech Mono',monospace",
-        fontSize: 11, color: 'var(--muted)',
+        fontSize: 11, color: 'var(--muted-bright)',
         textDecoration: 'none', letterSpacing: 1.5,
-        transition: 'color .2s, text-shadow .2s',
+        transition: 'color 0.2s',
+        position: 'relative',
+        whiteSpace: 'nowrap',
+      }}
+      onMouseOver={e => {
+        e.currentTarget.style.color = 'var(--white)';
+        e.currentTarget.style.textShadow = '0 0 12px var(--red)';
+      }}
+      onMouseOut={e => {
+        e.currentTarget.style.color = 'var(--muted-bright)';
+        e.currentTarget.style.textShadow = 'none';
       }}
     >
       {label}
@@ -73,40 +77,103 @@ const NavLink = memo(function NavLink({ label, href,download=false }) {
   );
 });
 
-// ─── Nav ──────────────────────────────────────────────────────────────────────
+// ─── Mobile menu ──────────────────────────────────────────────────────────────
+const MobileMenu = memo(function MobileMenu({ isOpen, onClose, muted, onToggleSound }) {
+  if (!isOpen) return null;
+  return (
+    <div
+      style={{
+        position: 'fixed', inset: 0, top: 60,
+        background: 'rgba(2,4,8,0.97)',
+        backdropFilter: 'blur(16px)',
+        WebkitBackdropFilter: 'blur(16px)',
+        zIndex: 999,
+        display: 'flex', flexDirection: 'column',
+        padding: '32px 24px',
+        gap: 0,
+        animation: 'revealUp 0.25s ease',
+        borderTop: '1px solid rgba(255,70,85,0.2)',
+      }}
+      onClick={onClose}
+    >
+      {/* Nav links */}
+      {[...NAV_LINKS, { label: 'AGENT FILE', href: '/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf', download: true }].map(({ label, href, download }, i) => (
+        <a
+          key={label}
+          href={href}
+          download={download || undefined}
+          onClick={onClose}
+          style={{
+            fontFamily: "'Share Tech Mono',monospace",
+            fontSize: 14, color: 'var(--text-primary)',
+            textDecoration: 'none', letterSpacing: 2,
+            padding: '16px 0',
+            borderBottom: '1px solid rgba(42,58,80,0.3)',
+            display: 'flex', alignItems: 'center', gap: 14,
+            animationDelay: `${i * 50}ms`,
+          }}
+        >
+          <span style={{ color: 'var(--red)', fontSize: 9 }}>▸</span>
+          {label}
+        </a>
+      ))}
 
+      {/* Bottom row */}
+      <div style={{
+        marginTop: 'auto', paddingTop: 24,
+        display: 'flex', gap: 12, alignItems: 'center',
+      }}>
+        <a
+          href="#contact"
+          onClick={onClose}
+          className="btn btn-red"
+          style={{ flex: 1, textAlign: 'center', textDecoration: 'none' }}
+        >
+          DEPLOY ME
+        </a>
+        <SoundToggle muted={muted} onToggle={onToggleSound} />
+      </div>
+    </div>
+  );
+});
+
+// ─── Nav ──────────────────────────────────────────────────────────────────────
 export const Nav = memo(function Nav({ scrollProgress }) {
   const scrolled = useScrolled(20);
   const { muted, toggle } = useSound();
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  const handleToggle = useCallback(() => {
+  const handleToggleSound = useCallback(() => {
     sfxClick();
     toggle();
   }, [toggle]);
+
+  const handleMenuToggle = useCallback(() => {
+    sfxClick();
+    setMenuOpen(prev => !prev);
+  }, []);
 
   return (
     <>
       {/* Scroll progress bar */}
       <div style={{
-        position: 'fixed', top: 0, left: 0, height: 3,
+        position: 'fixed', top: 0, left: 0, height: 2,
         background: 'linear-gradient(90deg, var(--red), var(--cyan))',
-        boxShadow: '0 0 12px var(--cyan)',
+        boxShadow: '0 0 10px var(--cyan)',
         zIndex: 9999,
         width: `${scrollProgress}%`,
-        transition: 'width .1s linear',
+        transition: 'width 0.1s linear',
       }} />
 
+      {/* Nav bar */}
       <nav
         className="nav-inner"
         style={{
-          position: 'fixed', top: 0, left: 0, right: 0, height: 60,
-          display: 'flex', alignItems: 'center',
-          padding: '0 40px', gap: 28,
-          zIndex: 1000,
-          background: scrolled ? 'rgba(7,13,22,.92)' : 'transparent',
+          background: scrolled ? 'rgba(7,13,22,0.92)' : 'transparent',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,70,85,.25)' : '1px solid transparent',
-          transition: 'all .3s',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          borderBottom: scrolled ? '1px solid rgba(255,70,85,0.2)' : '1px solid transparent',
+          transition: 'all 0.3s',
         }}
       >
         {/* Logo mark */}
@@ -118,31 +185,102 @@ export const Nav = memo(function Nav({ scrollProgress }) {
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           fontFamily: "'Rajdhani',sans-serif",
           fontWeight: 700, fontSize: 13, color: '#fff',
+          boxShadow: '0 0 16px rgba(255,70,85,0.4)',
         }}>
           NP
         </div>
 
         {/* Name + role */}
-        <div style={{ flex: 1 }}>
-          <div style={{ fontFamily: "'Rajdhani',sans-serif", fontWeight: 700, fontSize: 17, color: 'var(--white)', lineHeight: 1 }}>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{
+            fontFamily: "'Rajdhani',sans-serif",
+            fontWeight: 700, fontSize: 17,
+            color: 'var(--white)', lineHeight: 1,
+          }}>
             NIKUNJ PATEL
           </div>
-          <div style={{ fontFamily: "'Share Tech Mono',monospace", fontSize: 9, color: 'var(--red)', letterSpacing: 2 }}>
+          <div style={{
+            fontFamily: "'Share Tech Mono',monospace",
+            fontSize: 9, color: 'var(--red)',
+            letterSpacing: 2,
+          }}>
             SDE-3 // PUNE, INDIA
           </div>
         </div>
 
-        {/* Nav links */}
-        <div className="nav-links" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
+        {/* Desktop nav links */}
+        <div
+          className="nav-links"
+          style={{
+            display: 'flex', gap: 24,
+            alignItems: 'center',
+          }}
+        >
           {NAV_LINKS.map(({ label, href }) => (
             <NavLink key={label} label={label} href={href} />
           ))}
-       <NavLink key={"CV"} label={"Agent File"} href={"/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"}  
-              download="Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"/>
-          <SoundToggle muted={muted} onToggle={handleToggle} />
+          <NavLink
+            label="AGENT FILE"
+            href="/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
+            download="Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
+          />
+          <SoundToggle muted={muted} onToggle={handleToggleSound} />
         </div>
-        <MagBtn variant="red" href="#contact">DEPLOY ME</MagBtn>
+
+        {/* Desktop CTA */}
+        <div className="nav-links">
+          <MagBtn variant="red" href="#contact">DEPLOY ME</MagBtn>
+        </div>
+
+        {/* Mobile hamburger */}
+        <button
+          className="mobile-menu-btn"
+          onClick={handleMenuToggle}
+          aria-label="Toggle menu"
+          style={{
+            display: 'none',
+            background: 'none',
+            border: '1px solid rgba(255,70,85,0.4)',
+            color: 'var(--red)',
+            width: 36, height: 36,
+            cursor: 'pointer',
+            alignItems: 'center',
+            justifyContent: 'center',
+            clipPath: 'var(--clip-sm)',
+            flexShrink: 0,
+          }}
+        >
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            {menuOpen ? (
+              <>
+                <line x1="18" y1="6" x2="6" y2="18" />
+                <line x1="6" y1="6" x2="18" y2="18" />
+              </>
+            ) : (
+              <>
+                <line x1="4" y1="8" x2="20" y2="8" />
+                <line x1="4" y1="16" x2="20" y2="16" />
+              </>
+            )}
+          </svg>
+        </button>
       </nav>
+
+      {/* Mobile menu overlay */}
+      <MobileMenu
+        isOpen={menuOpen}
+        onClose={() => setMenuOpen(false)}
+        muted={muted}
+        onToggleSound={handleToggleSound}
+      />
+
+      {/* Mobile hamburger show rule */}
+      <style>{`
+        @media (max-width: 768px) {
+          .mobile-menu-btn { display: flex !important; }
+          .nav-links { display: none !important; }
+        }
+      `}</style>
     </>
   );
 });
