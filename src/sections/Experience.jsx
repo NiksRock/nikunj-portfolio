@@ -81,8 +81,9 @@ const ExperienceItem = memo(function ExperienceItem({ item, isOpen, onToggle }) 
           </span>
         </button>
 
-        {/* Accordion body */}
+        {/* Accordion body — grid-template-rows trick for pixel-perfect animation */}
         <div className={`acc-body ${isOpen ? 'open' : ''}`}>
+          <div className="acc-body-inner">
           <div
             className="acc-inner"
             style={{ padding: '0 22px 24px' }}
@@ -160,7 +161,8 @@ const ExperienceItem = memo(function ExperienceItem({ item, isOpen, onToggle }) 
               </div>
             </div>
           </div>
-        </div>
+          </div>{/* acc-body-inner */}
+        </div>{/* acc-body */}
       </div>
     </Reveal>
   );
@@ -228,11 +230,24 @@ const EducationCards = memo(function EducationCards() {
                 fontSize: 9, color: 'var(--muted-bright)',
                 letterSpacing: 1,
                 display: 'flex', alignItems: 'center', gap: 6,
+                marginBottom: edu.cgpa ? 4 : 0,
               }}>
                 <span>{edu.university}</span>
                 <span style={{ color: 'var(--muted)' }}>·</span>
                 <span>{edu.period}</span>
               </div>
+              {edu.cgpa && (
+                <div style={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: 9, color: 'var(--muted-bright)',
+                  letterSpacing: 1,
+                  display: 'flex', alignItems: 'center', gap: 6,
+                }}>
+                  <span style={{ color: edu.color }}>CGPA {edu.cgpa}</span>
+                  <span style={{ color: 'var(--muted)' }}>·</span>
+                  <span>{edu.grade}</span>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -303,7 +318,9 @@ export function Experience() {
         </Reveal>
 
         {/* Experience accordion list */}
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div style={{ position: 'relative', display: 'flex', flexDirection: 'column', gap: 8, paddingLeft: 0 }}>
+          {/* Timeline connector */}
+          <div className="exp-timeline" />
           {EXPERIENCE.map((item, i) => (
             <ExperienceItem
               key={item.company}

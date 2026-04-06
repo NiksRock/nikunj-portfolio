@@ -49,3 +49,26 @@ export async function logUnansweredQuestion(question) {
     // Silently fail — logging should never break the portfolio
   }
 }
+
+/**
+ * Logs a visitor's contact info alongside the question that triggered it.
+ * @param {string} contact   - Email or phone the visitor provided
+ * @param {string} question  - The original unanswered question
+ */
+export async function logContactInfo(contact, question) {
+  if (!SHEETS_WEBHOOK_URL || !contact?.trim()) return;
+
+  try {
+    await fetch(SHEETS_WEBHOOK_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({
+        timestamp: new Date().toISOString(),
+        question: `[CONTACT] Q: "${question?.trim() || 'N/A'}" → ${contact.trim()}`,
+        session: SESSION_ID,
+      }),
+    });
+  } catch {
+    // Silently fail
+  }
+}

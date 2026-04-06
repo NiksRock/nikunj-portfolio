@@ -17,9 +17,9 @@ function SkillCards() {
             }}
             onMouseEnter={(e) => {
               sfxCard();
-              e.currentTarget.style.transform = 'translateY(-3px)';
-              e.currentTarget.style.boxShadow = '0 8px 32px rgba(255,70,85,0.18)';
-              e.currentTarget.style.borderColor = 'rgba(255,70,85,0.3)';
+              e.currentTarget.style.transform = 'translateY(-5px) scale(1.01)';
+              e.currentTarget.style.boxShadow = '0 14px 40px rgba(255,70,85,0.22)';
+              e.currentTarget.style.borderColor = 'rgba(255,70,85,0.35)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.transform = '';
@@ -167,7 +167,7 @@ export function Skills() {
         className="section-inner"
         onMouseEnter={sfxWhoosh}
       >
-        <SectionHead sub="// CLASS OVERVIEW" title="SKILL LOADOUT" />
+        <SectionHead sub="// CLASS OVERVIEW" title="SKILL LOADOUT" color="var(--cyan)" />
         <div className="skills-grid">
           <SkillCards />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>

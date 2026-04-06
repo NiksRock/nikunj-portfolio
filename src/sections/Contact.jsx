@@ -4,10 +4,8 @@ import { sfxBtn } from '../audio/engine';
 export function Contact() {
   return (
     <section id="contact" style={{ borderTop: '1px solid rgba(42,58,80,0.3)' }}>
-      <div
-        className="section-inner"
-        style={{ textAlign: 'center' }}
-      >
+      <div className="section-inner" style={{ textAlign: 'center' }}>
+
         {/* Section heading */}
         <Reveal>
           <div style={{
@@ -18,26 +16,51 @@ export function Contact() {
             <span style={{ display: 'inline-block', width: 3, height: 16, background: 'var(--red)' }} />
             // OPEN COMMS
           </div>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '0 auto 10px', maxWidth: 400 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '0 auto 16px', maxWidth: 400 }}>
             <div style={{ height: 1, flex: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
             <div style={{ width: 5, height: 5, background: 'var(--red)', transform: 'rotate(45deg)' }} />
             <div style={{ height: 1, width: 36, background: 'rgba(255,70,85,0.25)' }} />
           </div>
           <div style={{
             fontFamily: "'Rajdhani',sans-serif",
-            fontWeight: 700, fontSize: 'clamp(36px,4vw,52px)',
-            color: 'var(--white)', lineHeight: 1, marginBottom: 44,
+            fontWeight: 700, fontSize: 'clamp(34px,4vw,52px)',
+            color: 'var(--white)', lineHeight: 1, marginBottom: 20,
+            letterSpacing: '-1px',
           }}>
             INITIATE CONTACT
           </div>
+
+          {/* Availability status */}
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 8,
+            background: 'rgba(0,255,100,0.06)',
+            border: '1px solid rgba(0,255,100,0.2)',
+            padding: '6px 16px', marginBottom: 32,
+            clipPath: 'var(--clip-sm)',
+          }}>
+            <div style={{
+              width: 7, height: 7, borderRadius: '50%',
+              background: 'var(--green)',
+              boxShadow: '0 0 8px var(--green)',
+              animation: 'pulse-g 2s infinite',
+              flexShrink: 0,
+            }} />
+            <span style={{
+              fontFamily: "'Share Tech Mono',monospace",
+              fontSize: 10, color: 'var(--green)',
+              letterSpacing: 2,
+            }}>
+              AVAILABLE FOR NEW MISSIONS
+            </span>
+          </div>
         </Reveal>
 
-        {/* Body copy + contact info */}
-        <Reveal delay={100}>
+        {/* Body copy + contact chips */}
+        <Reveal delay={80}>
           <SpeakText
             tag="p"
             style={{
-              maxWidth: 460, margin: '0 auto 16px',
+              maxWidth: 460, margin: '0 auto 20px',
               color: 'var(--text-body)', lineHeight: 1.8,
               fontSize: 15.5, display: 'block',
             }}
@@ -46,10 +69,10 @@ export function Contact() {
             scaling frontend teams, or building robust React ecosystems — let's deploy together.
           </SpeakText>
 
-          {/* Contact details chip row */}
+          {/* Contact detail chips */}
           <div style={{
-            display: 'flex', gap: 20, justifyContent: 'center',
-            flexWrap: 'wrap', marginBottom: 40,
+            display: 'flex', gap: 16, justifyContent: 'center',
+            flexWrap: 'wrap', marginBottom: 36,
           }}>
             {[
               { icon: '✉', text: 'nikunjpatel1581996@gmail.com', href: 'mailto:nikunjpatel1581996@gmail.com' },
@@ -65,7 +88,7 @@ export function Contact() {
                   letterSpacing: 0.5,
                 }}
               >
-                <span style={{ color: 'var(--cyan)', fontSize: 11 }}>{icon}</span>
+                <span style={{ color: 'var(--cyan)', fontSize: 12 }}>{icon}</span>
                 {href ? (
                   <a
                     href={href}
@@ -73,14 +96,21 @@ export function Contact() {
                       color: 'var(--muted-bright)',
                       textDecoration: 'none',
                       transition: 'color 0.15s',
+                      textUnderlineOffset: '3px',
                     }}
-                    onMouseEnter={e => e.currentTarget.style.color = 'var(--cyan)'}
-                    onMouseLeave={e => e.currentTarget.style.color = 'var(--muted-bright)'}
+                    onMouseEnter={e => {
+                      e.currentTarget.style.color = 'var(--cyan)';
+                      e.currentTarget.style.textDecoration = 'underline';
+                    }}
+                    onMouseLeave={e => {
+                      e.currentTarget.style.color = 'var(--muted-bright)';
+                      e.currentTarget.style.textDecoration = 'none';
+                    }}
                   >
                     {text}
                   </a>
                 ) : (
-                  <span>{text}</span>
+                  <span style={{ color: 'var(--muted-bright)' }}>{text}</span>
                 )}
               </div>
             ))}
@@ -88,9 +118,9 @@ export function Contact() {
         </Reveal>
 
         {/* CTA buttons */}
-        <Reveal delay={180}>
+        <Reveal delay={160}>
           <div className="contact-btns">
-            <MagBtn variant="red" href="mailto:nikunjpatel1581996@gmail.com">
+            <MagBtn variant="red" href="mailto:nikunjpatel1581996@gmail.com" style={{ flex: '1 0 auto' }}>
               SEND TRANSMISSION
             </MagBtn>
             <MagBtn variant="cyan" href="https://github.com/NiksRock" target="_blank" rel="noopener noreferrer">
@@ -116,28 +146,29 @@ export function Contact() {
         </Reveal>
 
         {/* Divider + footer */}
-        <Reveal delay={260}>
-          <div style={{ marginTop: 80 }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 16 }}>
-              <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,var(--red))' }} />
-              <div style={{
+        <Reveal delay={240}>
+          <div style={{ marginTop: 72 }}>
+            <div className="contact-footer-row" style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 14 }}>
+              <div className="contact-footer-line" style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,transparent,var(--red))' }} />
+              <div className="contact-footer-text" style={{
                 fontFamily: "'Share Tech Mono',monospace",
                 fontSize: 9, color: 'var(--muted-bright)',
-                letterSpacing: 2,
+                letterSpacing: 2, flexShrink: 0,
               }}>
                 NKP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
               </div>
-              <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
+              <div className="contact-footer-line" style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
             </div>
             <div style={{
               fontFamily: "'Share Tech Mono',monospace",
-              fontSize: 9, color: 'rgba(42,58,80,0.6)',
+              fontSize: 9, color: 'var(--text-dim)',
               letterSpacing: 1,
             }}>
               &copy; 2026 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
             </div>
           </div>
         </Reveal>
+
       </div>
     </section>
   );

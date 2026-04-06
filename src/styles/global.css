@@ -183,9 +183,13 @@ body {
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(135deg, rgba(255, 70, 85, 0.03) 0%, transparent 50%);
+  background: linear-gradient(135deg, rgba(255, 70, 85, 0.06) 0%, transparent 50%);
   pointer-events: none;
   z-index: 0;
+  transition: opacity 0.25s ease;
+}
+.card:hover::before {
+  opacity: 1.5;
 }
 
 /* ─── Buttons ────────────────────────────────────────────────────────────── */
@@ -301,14 +305,18 @@ body {
   border-radius: 2px;
 }
 
-/* ─── Accordion ──────────────────────────────────────────────────────────── */
+/* ─── Accordion (grid-template-rows for pixel-perfect smooth animation) ─── */
 .acc-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.45s ease;
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .acc-body.open {
-  max-height: 900px;
+  grid-template-rows: 1fr;
+}
+.acc-body-inner {
+  overflow: hidden;
+  min-height: 0;
 }
 
 /* ─── Sound hint ─────────────────────────────────────────────────────────── */
@@ -473,8 +481,8 @@ body {
   bottom: 96px;
   right: 28px;
   z-index: var(--z-bot);
-  width: 390px;
-  height: 560px;
+  width: 400px;
+  height: 620px;
   background: var(--surface);
   clip-path: var(--clip);
   border: 1px solid rgba(255, 70, 85, 0.35);
@@ -642,6 +650,13 @@ body {
   margin-bottom: 3px;
 }
 
+/* ─── Responsive: Wide tablet / small desktop ───────────────────────────── */
+@media (max-width: 1140px) {
+  .section-inner { padding: 80px 40px; }
+  .hero-wrap     { padding: 80px 40px 48px; gap: 40px; }
+  .hero-card-wrap { align-self: center; }
+}
+
 /* ─── Responsive: Tablet ─────────────────────────────────────────────────── */
 @media (max-width: 1024px) {
   .skills-grid {
@@ -674,12 +689,25 @@ body {
   .hero-card-wrap { align-self: center !important; }
   .hero-card-wrap > div { width: 200px !important; height: 290px !important; }
   .hero-btns .btn { padding: 8px 14px !important; font-size: 10px !important; letter-spacing: 1px !important; }
-  .hero-stats > div {
-    border-right: none !important;
-    border-bottom: 1px solid rgba(42, 58, 80, 0.35) !important;
-    padding: 8px 10px !important;
+  .hero-stats {
+    flex-wrap: wrap !important;
+    padding-top: 0 !important;
+    margin-top: 20px !important;
   }
-  .hero-stats > div:last-child { border-bottom: none !important; }
+  .hero-stats > div {
+    flex: 0 0 50% !important;
+    border-right: 1px solid rgba(42, 58, 80, 0.35) !important;
+    border-bottom: 1px solid rgba(42, 58, 80, 0.35) !important;
+    padding: 12px 10px !important;
+    box-sizing: border-box !important;
+  }
+  .hero-stats > div:nth-child(even) {
+    border-right: none !important;
+  }
+  .hero-stats > div:last-child,
+  .hero-stats > div:nth-last-child(2) {
+    border-bottom: none !important;
+  }
 
   /* Sections */
   .section-inner { padding: 60px 20px !important; }
@@ -708,27 +736,44 @@ body {
     justify-content: center !important;
   }
 
+  /* Contact footer */
+  .contact-footer-row {
+    flex-wrap: wrap !important;
+    gap: 8px !important;
+  }
+  .contact-footer-text {
+    font-size: 8px !important;
+    flex: none !important;
+    text-align: center !important;
+    line-height: 1.6 !important;
+  }
+  .contact-footer-line { display: none !important; }
+
+  /* Mobile hamburger show */
+  .mobile-menu-btn { display: flex !important; }
+
   /* Bot panel — full height on mobile */
   .bot-panel {
-    width: calc(100vw - 24px) !important;
-    left: 12px !important;
-    right: 12px !important;
-    top: 64px !important;
-    bottom: 86px !important;
+    width: calc(100vw - 20px) !important;
+    left: 10px !important;
+    right: 10px !important;
+    top: 68px !important;
+    bottom: calc(84px + env(safe-area-inset-bottom)) !important;
     height: auto !important;
+    clip-path: var(--clip-sm) !important;
   }
   .bot-fab {
     right: 16px !important;
     bottom: 20px !important;
   }
   .msg {
-    font-size: 14px !important;
+    font-size: 13.5px !important;
     line-height: 1.65 !important;
     max-width: 95% !important;
   }
   .bot-send {
-    padding: 9px 20px !important;
-    font-size: 12px !important;
+    padding: 9px 16px !important;
+    font-size: 11px !important;
   }
   .logger-toast {
     left: 16px !important;
@@ -740,4 +785,80 @@ body {
   .skills-cards { grid-template-columns: 1fr !important; }
   .hero-card-wrap > div { width: 160px !important; height: 240px !important; }
   .stats-grid { grid-template-columns: 1fr !important; }
+}
+
+@media (max-width: 430px) {
+  .skills-cards  { grid-template-columns: 1fr !important; }
+  .proj-grid     { grid-template-columns: 1fr !important; }
+}
+
+/* ─── CRT Vignette ───────────────────────────────────────────────────────── */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 50% 50%, transparent 55%, rgba(0, 0, 0, 0.42) 100%);
+  pointer-events: none;
+  z-index: 9997;
+}
+
+/* ─── Menu wipe animation ────────────────────────────────────────────────── */
+@keyframes menuWipe {
+  from { opacity: 0; clip-path: inset(0 0 100% 0); }
+  to   { opacity: 1; clip-path: inset(0 0 0% 0); }
+}
+
+/* ─── Bracket corner hover ───────────────────────────────────────────────── */
+.card:hover .bc {
+  width: 18px !important;
+  height: 18px !important;
+}
+
+/* ─── Active nav link ────────────────────────────────────────────────────── */
+.nav-link-active {
+  color: var(--white) !important;
+  text-shadow: 0 0 14px rgba(255, 70, 85, 0.8) !important;
+}
+.nav-link-active::after {
+  content: '';
+  position: absolute;
+  bottom: -5px; left: 0; right: 0;
+  height: 2px;
+  background: var(--red);
+  box-shadow: 0 0 8px var(--red);
+  border-radius: 1px;
+}
+
+/* ─── Featured project card ──────────────────────────────────────────────── */
+.proj-featured {
+  grid-column: 1 / -1;
+}
+@media (max-width: 768px) {
+  .proj-featured { flex-direction: column !important; }
+  .proj-featured > div:first-of-type { width: 100% !important; height: 160px !important; }
+}
+
+/* ─── Experience timeline line ───────────────────────────────────────────── */
+.exp-timeline {
+  position: absolute;
+  left: -28px; top: 24px; bottom: 24px;
+  width: 2px;
+  background: linear-gradient(180deg,
+    var(--red)  0%,
+    var(--cyan) 33%,
+    var(--gold) 66%,
+    var(--muted-bright) 100%
+  );
+  opacity: 0.22;
+  border-radius: 2px;
+}
+
+/* ─── Prefers reduced motion ─────────────────────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
