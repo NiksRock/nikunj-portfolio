@@ -4,37 +4,37 @@ export const SKILLS = [
     id: "ALPHA",
     level: 95,
     name: "React Ecosystem",
-    tags: ["React", "Next.js", "Redux", "Redux-Saga"],
+    tags: ["React", "Next.js", "Redux Toolkit", "Redux-Saga", "Context API", "Tailwind CSS", "Material UI"],
   },
   {
     id: "BRAVO",
     level: 92,
-    name: "TypeScript & JS",
-    tags: ["TypeScript", "ES6+", "HTML5", "CSS3"],
+    name: "TypeScript & JavaScript",
+    tags: ["TypeScript", "JavaScript (ES6+)", "HTML5", "CSS3"],
   },
   {
     id: "CHARLIE",
     level: 90,
-    name: "Micro-Frontends",
-    tags: ["Module Fed.", "Webpack", "Rollup", "Nx"],
+    name: "Frontend Architecture",
+    tags: ["Module Federation", "Design Systems", "Component Libraries", "Internal NPM", "Monorepo"],
   },
   {
     id: "DELTA",
     level: 87,
-    name: "UI & Styling",
-    tags: ["Material UI", "Storybook", "Tailwind", "ARIA"],
+    name: "UI & Performance",
+    tags: ["Core Web Vitals", "Lighthouse", "Bundle Optimisation", "Code Splitting", "Lazy Loading", "Virtualisation"],
   },
   {
     id: "ECHO",
     level: 85,
-    name: "Cloud & Infra",
-    tags: ["AWS Amplify", "S3", "CloudFront", "CodeArtifact"],
+    name: "Cloud & DevOps",
+    tags: ["AWS Amplify", "S3", "CloudFront", "EC2", "CodeArtifact", "CI/CD", "Git", "WCAG / ARIA"],
   },
   {
     id: "FOXTROT",
     level: 83,
-    name: "Testing & CI",
-    tags: ["Jest", "RTL", "SonarQube", "Snyk", "Husky"],
+    name: "Testing & Quality",
+    tags: ["Jest", "React Testing Library", "Storybook", "SonarQube", "Snyk", "ESLint", "Husky"],
   },
 ];
 
@@ -42,15 +42,15 @@ export const SKILL_BARS = [
   ["React / Next.js", 95],
   ["TypeScript", 92],
   ["Module Federation", 90],
-  ["Redux / Redux-Saga", 88],
-  ["Material UI / Storybook", 85],
+  ["Design Systems", 88],
   ["AWS Cloud Infra", 83],
+  ["Testing / QA", 85],
 ];
 
 export const DEPLOYMENT_STATS = [
   ["MFE APPS", "4", "var(--red)"],
-  ["TEAM SIZE", "10", "var(--cyan)"],
-  ["USERS", "600K", "var(--gold)"],
+  ["MONTHLY USERS", "5M+", "var(--gold)"],
+  ["COMPONENTS", "20+", "var(--cyan)"],
   ["EXP", "7 YRS", "var(--red)"],
 ];
 
@@ -58,19 +58,24 @@ export const DEPLOYMENT_STATS = [
 export const EXPERIENCE = [
   {
     init: "SH",
-    company: "Star Health & Allied Insurance",
+    company: "Star Health and Allied Insurance Co. Ltd",
     tag: "INSURTECH",
     role: "Software Development Engineer – 3",
     period: "Apr 2023 — Present",
     color: "var(--red)",
     achievements: [
-      "Architected a micro-frontend platform supporting 4 independently deployed applications via Webpack Module Federation, serving 600K agents and operations teams across Agency, Alternate, and Banca channels.",
-      "Standardized frontend engineering across a 10-engineer team — introduced reusable component libraries, Husky pre-commit hooks, SonarQube quality checks, and Snyk security scanning.",
-      "Built a Storybook-driven component system with 20 reusable UI components used across all ATOM Portal applications.",
-      "Implemented a JSON-driven UI configuration architecture enabling dynamic rendering of complex insurance workflows without code changes.",
-      "Engineered @star-ui/atom-claims-ui — an internal AWS CodeArtifact NPM package covering claim intake, review, query management, and settlement; reduced duplicate frontend implementations across 4 consuming apps.",
-      "Built GrowPro marketing platform enabling 600K agents to generate personalized campaign creatives with 40–55% engagement lift; featured a drag-and-drop poster editor and HTML-to-PDF export via Next.js API routes.",
-      "Collaborated with backend, product, and operations teams to define stable API contracts and workflow interfaces across micro-frontends.",
+      "Took ATOM Portal from zero to a working 4-app micro-frontend setup — React, Next.js, TypeScript, Webpack Module Federation — covering 10+ insurance products across Agency, Alternate, and Banca channels; it now handles 600K+ agents daily, and deployment conflicts dropped 60% while new module onboarding got ~40% faster once teams stopped stepping on each other's releases.",
+      "Eliminated ~45% of repetitive sprint back-and-forth by introducing a JSON config layer that lets product spin up new insurance workflows without raising a frontend ticket.",
+      "Cut cross-app integration issues from 8–10 per sprint to 2–3 by initiating upfront API contract sessions with backend, product, and ops before any build kicked off — saving several hours of rework each cycle across all 4 apps.",
+      "Saved 30% of UI build time across 3+ products by advocating for and delivering a shared Material UI component system after the third React app began duplicating UI work — the system now underpins 5+ apps collectively serving 5M+ users across US markets.",
+      "Reduced production defects by 30% and improved PR throughput by rolling out SonarQube, Snyk, and Husky pre-commit hooks into the workflow for 10+ developers, ending quality back-and-forth at review time.",
+      "Reduced new feature scaffolding time by ~40% by building a 40+ component Storybook library after identifying that three teams were independently rebuilding identical UI across parallel applications.",
+      "Slashed UI inconsistencies by 50% by packaging @star-ui/atom-claims-ui — a shared library covering 4 claims workflows (intake, review, query management, settlement) that were previously being built independently across 3 apps.",
+      "Removed 25% of dead code and reduced consumer bundle size by migrating bundling to Rollup ES modules with tree-shaking; shipped 3 major releases with zero breaking changes by establishing a one-major deprecation policy and wiring auto-publishing to AWS CodeArtifact on merge via CI/CD — adopted by 20+ developers.",
+      "Reduced mid-sprint scope changes by ~30% and kept the package API stable across all releases by collaborating with backend and QA upfront to define claim state transitions and edge-case handling before build started.",
+      "Owned GrowPro's entire frontend solo — a campaign creation tool used by 600K+ agents; MoEngage data shows 40–50% regularly reach the campaign editor, with 10–25% customising poster placement and styling themselves.",
+      "Delivered 10K+ PDF exports at 20–40 ms render time by engineering a drag-and-drop poster editor (react-draggable, Material UI) with 10+ configurable poster types, dynamic templates, and an HTML-to-PDF export pipeline through Next.js API routes.",
+      "Scaled asset management to 100K+ campaign assets without incident by building and owning the full gallery, drafts, favourites, preview, and multipart upload pipeline end-to-end.",
     ],
     tech: [
       "React",
@@ -85,21 +90,21 @@ export const EXPERIENCE = [
       "AWS CodeArtifact",
       "SonarQube",
       "Snyk",
+      "Husky",
     ],
   },
   {
     init: "AZ",
-    company: "AltezzaSys Systems",
+    company: "AltezzaSys Systems – BSWHealth",
     tag: "HEALTHTECH",
     role: "Software Engineer",
     period: "Mar 2022 — Nov 2022",
     color: "var(--cyan)",
     achievements: [
-      "Developed operational dashboards and workflow UIs for the BSWHealth healthcare platform using React, TypeScript, Redux, and Redux-Saga.",
-      "Built a Storybook-based component library covering forms, tables, and layout primitives for consistent UI across the platform.",
-      "Architected Redux store structures and async workflows using Redux-Saga for scalable API integration.",
-      "Improved large-dataset rendering performance through table virtualization, filtering optimization, and pagination strategies.",
-      "Deployed frontend applications on AWS Amplify with CloudFront CDN for optimized global asset delivery.",
+      "Eased bug reports by 20% and improved workflow speed by 10–15% by building dashboards and workflow UIs across 5+ clinical modules for BSWHealth (200+ DAU) in React, TypeScript, and Redux-Saga — diagnosing and reworking the async flow structure causing persistent state bugs.",
+      "Brought table render time down by 40% on 10K+-row datasets by adding row virtualisation.",
+      "Got UI delivery moving 35% faster by putting together a 15-component Storybook library.",
+      "Shaved 30% off page load by wiring up AWS Amplify CI/CD with CloudFront caching.",
     ],
     tech: [
       "React",
@@ -109,6 +114,8 @@ export const EXPERIENCE = [
       "Storybook",
       "AWS Amplify",
       "AWS CloudFront",
+      "WebSockets",
+      "REST APIs",
     ],
   },
   {
@@ -119,11 +126,8 @@ export const EXPERIENCE = [
     period: "Feb 2020 — Feb 2022",
     color: "var(--gold)",
     achievements: [
-      "Delivered React-based client applications using Redux Thunk and React Router across multiple product domains.",
-      "Built reusable Material UI component systems including forms, dialogs, tables, and complex input components.",
-      "Implemented authentication and account management flows — email/password login, Facebook OAuth, email verification, and password reset.",
-      "Integrated Stripe payment workflows and notification services supporting transactional application features.",
-      "Connected frontend apps with AWS S3 for asset storage and EC2-hosted APIs, ensuring reliable data access and scalable infrastructure.",
+      "Reduced initial bundle by ~35% and brought page loads under 2s for 5M+ monthly visitors by leading bundle optimisation, code splitting, and lazy loading on NetworkedLive.",
+      "Completed a full platform migration for 100K+ users — 4 auth flows rebuilt, 78% re-registration rate achieved, zero data loss, Stripe integrated end-to-end — delivered in under 3 months.",
     ],
     tech: [
       "React",
@@ -131,6 +135,7 @@ export const EXPERIENCE = [
       "Redux Thunk",
       "Material UI",
       "Stripe",
+      "OAuth",
       "AWS S3",
       "AWS EC2",
       "Jest",
@@ -144,28 +149,30 @@ export const EXPERIENCE = [
     period: "Jan 2019 — Dec 2019",
     color: "var(--muted-bright)",
     achievements: [
-      "Built QVision — a real-time QA monitoring dashboard displaying CI pipeline execution results with analytics and automation performance visualization.",
-      "Developed frontend systems using React, Redux, and Spring Boot for internal applications and operational dashboards.",
-      "Delivered the attendance management module for the Tango HRMS platform supporting workforce tracking.",
-      "Improved dashboard responsiveness by optimizing data processing and rendering for large datasets.",
+      "Reduced defect triage time by 30% and returned 2+ hours per week to engineers by building QVision — an internal QA monitoring dashboard now used daily by 700+ engineers across 10+ CI test suites — and wiring Jira PI integration to auto-create tickets from pipeline events.",
+      "Cut manual HR work by ~35% by deploying Tango HRMS across 8 modules for 300+ employees, integrating RFID attendance, fingerprint recognition, and Jira PI automation.",
     ],
-    tech: ["React", "Redux", "Spring Boot", "JavaScript", "CSS3"],
+    tech: ["React", "Redux", "Spring Boot", "JavaScript", "CSS3", "Data Visualization"],
   },
 ];
 
 export const EDUCATION = [
   {
-    degree: "M.Sc ICT",
-    institute: "J.P. Dawer Institute of Information Science & Technology",
+    degree: "M.Sc. (Information & Communication Technology)",
+    institute: "Veer Narmad South Gujarat University",
     university: "VNSGU",
-    period: "Jul 2017 – Feb 2019",
+    period: "Jul 2017 – Jul 2019",
+    cgpa: "7.03 / 10.0",
+    grade: "First Class with Distinction",
     color: "var(--cyan)",
   },
   {
-    degree: "BCA",
-    institute: "M.K. Institute of Computer Studies",
+    degree: "Bachelor of Computer Application (BCA)",
+    institute: "Veer Narmad South Gujarat University",
     university: "VNSGU",
-    period: "Jun 2014 – May 2017",
+    period: "Jul 2014 – Feb 2017",
+    cgpa: "7.87 / 10.0",
+    grade: "First Class with Distinction",
     color: "var(--gold)",
   },
 ];
@@ -175,7 +182,7 @@ export const PROJECTS = [
   {
     id: "OPS-001",
     name: "ATOM PORTAL — MFE PLATFORM",
-    desc: "4-application micro-frontend insurance distribution platform serving 600K agents across Agency, Alternate, and Banca channels at Star Health.",
+    desc: "4-app micro-frontend insurance platform serving 600K+ agents daily and supporting 10+ insurance products across Agency, Alternate, and Banca channels.",
     tags: [
       "Next.js",
       "Module Federation",
@@ -184,59 +191,59 @@ export const PROJECTS = [
       "Redux Toolkit",
     ],
     metrics: [
-      { v: "600K", l: "USERS" },
+      { v: "600K+", l: "AGENTS" },
       { v: "4", l: "MFE APPS" },
-      { v: "10", l: "ENGINEERS" },
+      { v: "5M+", l: "MONTHLY USERS" },
     ],
     color: "var(--red)",
     bg: "linear-gradient(135deg,#1a0608 0%,#070d16 100%)",
     details:
-      "Mission-critical insurance distribution platform serving 600K+ agents across 10 insurance products. Architected 4 independently deployable micro-frontends with a shared Module Federation runtime. Implemented JSON-driven UI configuration for dynamic workflow rendering, distributed 20+ component libraries via AWS CodeArtifact, and enforced quality gates using Husky, SonarQube, and Snyk across a 10-engineer team.",
+      "Built ATOM Portal as a 4-app micro-frontend platform with React, Next.js, TypeScript and Webpack Module Federation. Delivered a shared component system, JSON-driven workflow configuration, and AWS CodeArtifact package distribution to reduce deployment conflicts by 60% and speed new module onboarding by ~40%.",
   },
   {
     id: "OPS-002",
     name: "GROWPRO MARKETING ENGINE",
-    desc: "Agent-facing campaign platform enabling 600K insurance agents to generate personalized marketing materials with 40–55% engagement lift.",
+    desc: "Agent-facing campaign platform used by 600K+ agents with drag-and-drop poster creation and HTML-to-PDF export.",
     tags: ["React", "Next.js", "Material UI", "react-draggable", "AWS S3"],
     metrics: [
-      { v: "600K", l: "AGENTS" },
-      { v: "55%", l: "ENGAGEMENT" },
-      { v: "100K", l: "ASSETS" },
+      { v: "600K+", l: "AGENTS" },
+      { v: "40-55%", l: "ENGAGEMENT" },
+      { v: "100K+", l: "ASSETS" },
     ],
     color: "var(--cyan)",
     bg: "linear-gradient(135deg,#001518 0%,#070d16 100%)",
     details:
-      "Full-featured marketing creation platform built within the ATOM ecosystem. Features a drag-and-drop poster editor built with react-draggable, dynamic template rendering with runtime campaign data, HTML-to-PDF export via Next.js API routes, and a full asset management workflow supporting gallery, drafts, favorites, preview, and multipart uploads for 100K+ campaign assets.",
+      "Built GrowPro as a solo frontend engine for campaign creation — a drag-and-drop poster editor with 10+ configurable poster types, dynamic templates, and HTML-to-PDF export via Next.js API routes. Scaled to support 100K+ campaign assets and achieve 20-40ms PDF render times.",
   },
   {
     id: "OPS-003",
     name: "@STAR-UI CLAIMS PACKAGE",
-    desc: "Internal NPM package — claims workflow UI modules covering intake, review, query management, and settlement, distributed via AWS CodeArtifact.",
+    desc: "Shared internal NPM package for claims workflows, distributed via AWS CodeArtifact and consumed by multiple apps.",
     tags: ["React", "TypeScript", "Rollup", "Material UI", "AWS CodeArtifact"],
     metrics: [
       { v: "20+", l: "COMPONENTS" },
-      { v: "4", l: "APP CONSUMERS" },
+      { v: "4", l: "CONSUMERS" },
       { v: "0", l: "BREAKING CHANGES" },
     ],
     color: "var(--gold)",
     bg: "linear-gradient(135deg,#120a00 0%,#070d16 100%)",
     details:
-      "Private NPM package @star-ui/atom-claims-ui distributed via AWS CodeArtifact. Covers the full claims domain UI — hospital search, claim intake, review queues, query management, and settlement workflows. Built with Rollup ES module output with tree-shaking, strict TypeScript and ESLint standards, and full Storybook documentation. Consumed by 4 applications with zero breaking changes.",
+      "Built @star-ui/atom-claims-ui as a shared internal NPM package for claims intake, review, query management, and settlement. Migrated bundling to Rollup ES modules with tree-shaking, cut dead code by 25%, and shipped 3 major releases with zero breaking changes via AWS CodeArtifact.",
   },
   {
     id: "OPS-004",
     name: "QVISION — QA DASHBOARD",
-    desc: "Real-time QA monitoring dashboard displaying CI pipeline execution results with analytics and automation performance visualization.",
+    desc: "Real-time QA monitoring dashboard used by 700+ engineers across CI suites, paired with Jira PI automation and HRMS attendance tooling.",
     tags: ["React", "Redux", "Spring Boot", "Data Visualization", "CSS3"],
     metrics: [
-      { v: "CI", l: "INTEGRATED" },
-      { v: "∞", l: "PIPELINE RUNS" },
-      { v: "⚡", l: "REAL-TIME" },
+      { v: "700+", l: "ENGINEERS" },
+      { v: "10+", l: "CI SUITES" },
+      { v: "8", l: "HR MODULES" },
     ],
     color: "var(--red)",
     bg: "linear-gradient(135deg,#0a0208 0%,#070d16 100%)",
     details:
-      "Internal engineering tool built at Lodestone to surface CI pipeline health in a visual, actionable dashboard. Features analytics charts for automation pass/fail rates, historical trend analysis, and performance metrics. Improved dashboard responsiveness through optimized data processing and rendering for large datasets. Also delivered the Tango HRMS attendance management module at the same company.",
+      "Built QVision to surface CI pipeline health with analytics, automation trend reporting, and Jira PI ticket automation. Also delivered the Tango HRMS attendance module across 8 modules for 300+ employees with RFID and fingerprint integration.",
   },
 ];
 
@@ -368,9 +375,9 @@ export const BOT_KNOWLEDGE_BASE = {
   contact: {
     keywords: ["contact", "email", "linkedin", "github", "phone", "reach", "get in touch", "connect", "message"],
     responses: [
-      "Best ways to reach Nikunj: email at nikunjpatel1581996@gmail.com, phone +91 8980368059, or LinkedIn at linkedin.com/in/nikunj-patel-1aa949156. You can also use the Contact section on this site to send a message directly.",
-      "You can email him at nikunjpatel1581996@gmail.com or connect on LinkedIn (nikunj-patel-1aa949156). His GitHub is github.com/NiksRock if you want to see his code. The contact form on this page works too.",
-      "Reach him via email (nikunjpatel1581996@gmail.com), phone (+91 8980368059), or LinkedIn. The Contact section at the bottom of this portfolio also has a direct message option.",
+      "Best ways to reach Nikunj: email at nikunjpatel1581996@gmail.com, phone +91 8980368059, or LinkedIn at linkedin.com/in/nikunj-patel-dev. You can also use the Contact section on this site to send a message directly.",
+      "You can email him at nikunjpatel1581996@gmail.com or connect on LinkedIn (nikunj-patel-dev). His GitHub is github.com/NiksRock if you want to see his code. The contact form on this page works too.",
+      "Reach him via email (nikunjpatel1581996@gmail.com), phone (+91 8980368059), or LinkedIn at linkedin.com/in/nikunj-patel-dev. The Contact section at the bottom of this portfolio also has a direct message option.",
     ],
   },
 
@@ -387,7 +394,7 @@ export const BOT_KNOWLEDGE_BASE = {
   education: {
     keywords: ["education", "degree", "college", "study", "university", "vnsgu", "qualification", "academic"],
     responses: [
-      "He has an M.Sc. in ICT from J.P. Dawer Institute (VNSGU, 2017-2019) and a BCA from M.K. Institute of Computer Studies (VNSGU, 2014-2017) — both from Veer Narmad South Gujarat University in Surat.",
+      "He holds an M.Sc. in Information & Communication Technology from Veer Narmad South Gujarat University (2017–2019, CGPA 7.03, First Class with Distinction) and a BCA from the same university (2014–2017, CGPA 7.87, First Class with Distinction).",
       "His academic background: M.Sc. ICT and BCA, both from VNSGU in Surat. Graduated in 2019 and moved into professional development straight after.",
     ],
   },
@@ -526,11 +533,11 @@ challenges: {
 
 // ─── Typewriter strings ───────────────────────────────────────────────────────
 export const TYPEWRITER_ITEMS = [
-  "REACT ARCHITECT",
-  "NEXT.JS ENGINEER",
-  "MFE SPECIALIST",
-  "MODULE FEDERATION",
-  "AWS FRONTEND",
+  "SENIOR FRONTEND ENGINEER",
+  "MICRO-FRONTEND ARCHITECT",
+  "REACT / NEXT.JS",
+  "UI SYSTEMS",
+  "AWS-DRIVEN FRONTEND",
 ];
 
 // ─── Nav links ────────────────────────────────────────────────────────────────
@@ -545,7 +552,7 @@ export const NAV_LINKS = [
 export const HERO_STATS = [
   { value: "7+", label: "YEARS EXP" },
   { value: "4", label: "MFE APPS" },
-  { value: "600K", label: "USERS SERVED" },
+  { value: "5M+", label: "MONTHLY USERS" },
   { value: "20+", label: "COMPONENTS" },
 ];
 

@@ -1,16 +1,46 @@
+import { useCallback, useRef } from 'react';
 import { sfxCard } from '../audio/engine';
 import { HERO_STATS, TYPEWRITER_ITEMS } from '../data';
 import { Brackets, MagBtn, Reveal, SpeakText, Typewriter } from '../components/primitives';
 
 function HeroCard() {
+  const cardRef = useRef(null);
+
+  const handleMouseMove = useCallback((e) => {
+    const el = cardRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const cx = rect.width / 2;
+    const cy = rect.height / 2;
+    const rx = ((y - cy) / cy) * -7;
+    const ry = ((x - cx) / cx) * 7;
+    el.style.transition = 'none';
+    el.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg) scale(1.02)`;
+  }, []);
+
+  const handleMouseLeave = useCallback(() => {
+    const el = cardRef.current;
+    if (!el) return;
+    el.style.transition = 'transform 0.55s cubic-bezier(0.22,0.68,0,1.1)';
+    el.style.transform = '';
+  }, []);
+
   return (
-    <div className="card" style={{
-      width: 272, height: 390,
-      border: '1px solid rgba(255,70,85,0.3)',
-      background: 'transparent',
-      position: 'relative', overflow: 'hidden',
-      boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,70,85,0.08)',
-    }}>
+    <div
+      ref={cardRef}
+      className="card"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      style={{
+        width: 272, height: 390,
+        border: '1px solid rgba(255,70,85,0.3)',
+        background: 'transparent',
+        position: 'relative', overflow: 'hidden',
+        boxShadow: '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(255,70,85,0.08)',
+        willChange: 'transform',
+      }}>
       <Brackets color="var(--red)" />
 
       {/* Profile image */}
@@ -113,11 +143,11 @@ function HeroCard() {
           fontFamily: "'Rajdhani',sans-serif",
           fontWeight: 700, fontSize: 22, color: 'var(--gold)',
           lineHeight: 1,
-        }}>600K</div>
+        }}>5M+</div>
         <div style={{
           fontFamily: "'Share Tech Mono',monospace",
           fontSize: 9, color: 'var(--muted-bright)',
-        }}>USERS</div>
+        }}>MONTHLY</div>
       </div>
     </div>
   );
@@ -237,9 +267,11 @@ export function Hero() {
             marginBottom: 32, fontSize: 15.5,
             display: 'block',
           }}>
-            Senior Frontend Engineer with 7 years architecting scalable, enterprise-grade web platforms.
-            Specialist in micro-frontend architecture with Webpack Module Federation, React and Next.js ecosystems,
-            and cloud-native frontend delivery on AWS.
+            Senior Frontend Engineer with 7 years of progressive experience — from optimizing bundles and building
+            workflow UIs to architecting micro-frontend platforms and shared component ecosystems across insurance,
+            healthcare, and e-commerce. Shipped systems serving 5M+ monthly users, reduced deployment conflicts by
+            60% on a 600K-agent platform, and built component libraries adopted across 5+ apps by 20+ developers.
+            Core stack: React, TypeScript, Next.js, Webpack Module Federation.
           </SpeakText>
         </Reveal>
 

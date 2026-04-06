@@ -7,9 +7,9 @@ import {
   sfxTyping,
 } from "../audio/engine";
 import { useSound } from "../audio/SoundContext";
-import { logUnansweredQuestion } from "../botLogger";
+import { logContactInfo, logUnansweredQuestion } from "../botLogger";
 import { getBotResponse } from "../botMatcher";
-import { BOT_QUICK_PROMPTS, SHEETS_WEBHOOK_URL } from "../data"; 
+import { BOT_QUICK_PROMPTS } from "../data";
 
 // ─── Constants ────────────────────────────────────────────────────────────────
 
@@ -18,9 +18,28 @@ const INITIAL_MESSAGE = {
   text: "Hey! I'm Nikunj's portfolio assistant. Ask me about his skills, experience, projects, or whether he's open to new opportunities.\n\nClick any of my messages to hear them read aloud — click again to stop.",
 };
 
+const CONTACT_ASK_MSG =
+  "Your question has been flagged for Nikunj — he'll get back to you shortly.\n\nTo help him reach you directly, could you share your **email** or **phone number**?";
+
 const RESPONSE_DELAY_MIN = 400;
 const RESPONSE_DELAY_JITTER = 320;
 const TYPING_DELAYS = [0, 150, 300];
+
+// ─── Contact detection helpers ────────────────────────────────────────────────
+
+const EMAIL_RE = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+const PHONE_RE = /(\+?\d[\s\-.()]?){7,15}/;
+
+function isContactInfo(text) {
+  return EMAIL_RE.test(text) || PHONE_RE.test(text.replace(/[\s\-.()+]/g, ""));
+}
+
+const DECLINE_WORDS = ["no", "nope", "skip", "later", "not now", "na", "nah", "cancel", "pass"];
+
+function isDecline(text) {
+  const t = text.toLowerCase().trim().replace(/[.!?]$/, "");
+  return DECLINE_WORDS.includes(t);
+}
 
 // ─── Sub-components ───────────────────────────────────────────────────────────
 
@@ -157,31 +176,7 @@ const QuickPrompts = memo(function QuickPrompts({ onSelect }) {
   );
 });
 
-const LoggerToast = memo(function LoggerToast({ visible, question }) {
-  if (!visible) return null;
-  return (
-    <div className="logger-toast">
-      <div className="logger-toast-label">// QUESTION LOGGED</div>
-      <div style={{ color: "var(--gold)", fontSize: 11 }}>
-        "{question?.slice(0, 40)}
-        {question?.length > 40 ? "…" : ""}"
-      </div>
-      <div
-        style={{
-          marginTop: 4,
-          color: "var(--text-dim)",
-          fontSize: 8,
-          letterSpacing: 0.5,
-        }}
-      >
-        Sent to your Google Sheet
-      </div>
-    </div>
-  );
-});
-
 // ─── BotMessage ───────────────────────────────────────────────────────────────
-// Isolated so speaking state doesn't re-render the full message list
 
 const BotMessage = memo(function BotMessage({ msg, onSpeak }) {
   const [speaking, setSpeaking] = useState(false);
@@ -191,7 +186,6 @@ const BotMessage = memo(function BotMessage({ msg, onSpeak }) {
     sfxClick();
 
     if (speaking) {
-      // FIX 1: Click again to STOP speech
       window.speechSynthesis?.cancel();
       setSpeaking(false);
       return;
@@ -200,6 +194,20 @@ const BotMessage = memo(function BotMessage({ msg, onSpeak }) {
     setSpeaking(true);
     onSpeak(msg.text, () => setSpeaking(false));
   }, [msg, speaking, onSpeak]);
+
+  // Render bold markers (**text**) in bot messages
+  const renderText = (text) => {
+    if (!text.includes("**")) return text;
+    return text.split(/\*\*(.*?)\*\*/g).map((part, i) =>
+      i % 2 === 1 ? (
+        <strong key={i} style={{ color: "var(--white)", fontWeight: 600 }}>
+          {part}
+        </strong>
+      ) : (
+        part
+      )
+    );
+  };
 
   return (
     <div
@@ -214,13 +222,12 @@ const BotMessage = memo(function BotMessage({ msg, onSpeak }) {
       }
       style={{
         cursor: msg.role === "bot" ? "pointer" : "default",
-        // Subtle glow when actively speaking
         boxShadow: speaking ? "0 0 10px rgba(0,212,255,.25)" : undefined,
         borderColor: speaking ? "rgba(0,212,255,.4)" : undefined,
         transition: "box-shadow .2s, border-color .2s",
       }}
     >
-      {msg.text}
+      {msg.role === "bot" ? renderText(msg.text) : msg.text}
       {speaking && (
         <span
           style={{
@@ -245,33 +252,26 @@ export function AIBot() {
   const [messages, setMessages] = useState([INITIAL_MESSAGE]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
-  const [toast, setToast] = useState({ visible: false, question: "" });
+  const [awaitingContact, setAwaitingContact] = useState(false);
 
-  // FIX 2: Track the last bot message ref for smart scrolling
-  const lastBotMsgRef = useRef(null);
+  const pendingQuestionRef = useRef("");
   const msgsContainerRef = useRef(null);
   const inputRef = useRef(null);
-  const toastTimerRef = useRef(null);
   const { muted } = useSound();
 
-  // FIX 2: On new message, scroll so the START of the latest bot reply is visible
-  // (not the bottom — so long replies are readable from the top)
+  // Scroll so the start of the latest bot reply is visible
   useEffect(() => {
     if (!msgsContainerRef.current) return;
     const container = msgsContainerRef.current;
 
-    // If loading, scroll to bottom to show typing indicator
     if (loading) {
       container.scrollTop = container.scrollHeight;
       return;
     }
 
-    // Find the last bot message and scroll its top to the top of the container
     const allMsgs = container.querySelectorAll(".msg-bot");
     if (allMsgs.length > 0) {
       const lastBot = allMsgs[allMsgs.length - 1];
-      // Scroll so the start of the last bot reply is at the top of the viewport
-      // with a small offset so context above is still visible
       const offsetTop = lastBot.offsetTop - 12;
       container.scrollTo({ top: offsetTop, behavior: "smooth" });
     }
@@ -285,23 +285,13 @@ export function AIBot() {
     }
   }, [open]);
 
-  // Cleanup
+  // Cleanup on unmount
   useEffect(
     () => () => {
-      clearTimeout(toastTimerRef.current);
       window.speechSynthesis?.cancel();
     },
     [],
   );
-
-  const showToast = useCallback((question) => {
-    clearTimeout(toastTimerRef.current);
-    setToast({ visible: true, question });
-    toastTimerRef.current = setTimeout(
-      () => setToast({ visible: false, question: "" }),
-      4000,
-    );
-  }, []);
 
   const handleToggle = useCallback(() => {
     setOpen((prev) => {
@@ -309,11 +299,14 @@ export function AIBot() {
       if (next) sfxTransmission();
       else {
         sfxClick();
-        // Stop any speech when closing
         window.speechSynthesis?.cancel();
       }
       return next;
     });
+  }, []);
+
+  const addBotMsg = useCallback((text) => {
+    setMessages((prev) => [...prev, { role: "bot", text }]);
   }, []);
 
   const handleSend = useCallback(
@@ -326,16 +319,41 @@ export function AIBot() {
       setMessages((prev) => [...prev, { role: "user", text: query }]);
       setLoading(true);
 
+      // ── Contact-collection mode ──────────────────────────────────────────
+      if (awaitingContact) {
+        const delay = 500 + Math.random() * 200;
+        setTimeout(() => {
+          let response;
+
+          if (isContactInfo(query)) {
+            logContactInfo(query, pendingQuestionRef.current);
+            response =
+              "Noted ✓ I've passed your contact to Nikunj — he'll be in touch soon.\n\nYou can also reach him directly at nikunjpatel1581996@gmail.com or on LinkedIn at linkedin.com/in/nikunj-patel-dev.";
+          } else if (isDecline(query)) {
+            response =
+              "No problem! You can reach Nikunj directly at nikunjpatel1581996@gmail.com or on LinkedIn at linkedin.com/in/nikunj-patel-dev.";
+          } else {
+            // Treat as a new question — exit contact mode
+            setAwaitingContact(false);
+            const { response: botResponse, isFallback } = getBotResponse(query);
+            addBotMsg(botResponse);
+            if (isFallback) logUnansweredQuestion(query);
+            setLoading(false);
+            return;
+          }
+
+          setAwaitingContact(false);
+          addBotMsg(response);
+          setLoading(false);
+        }, delay);
+        return;
+      }
+
+      // ── Normal processing ────────────────────────────────────────────────
       const delay = RESPONSE_DELAY_MIN + Math.random() * RESPONSE_DELAY_JITTER;
       setTimeout(async () => {
         const { response, isFallback } = getBotResponse(query);
- 
-        setMessages((prev) => [...prev, { role: "bot", text: response }]);
-
-        if (isFallback) {
-          await logUnansweredQuestion(query);
-          if (SHEETS_WEBHOOK_URL) showToast(query);
-        }
+        addBotMsg(response);
 
         if (!muted) {
           const wordCount = Math.min(response.split(" ").length, 20);
@@ -344,10 +362,22 @@ export function AIBot() {
           }
         }
 
-        setLoading(false);
+        if (isFallback) {
+          await logUnansweredQuestion(query);
+          pendingQuestionRef.current = query;
+
+          // Follow-up: notify visitor and ask for contact
+          setTimeout(() => {
+            addBotMsg(CONTACT_ASK_MSG);
+            setAwaitingContact(true);
+            setLoading(false);
+          }, 900);
+        } else {
+          setLoading(false);
+        }
       }, delay);
     },
-    [input, loading, muted, showToast],
+    [awaitingContact, addBotMsg, input, loading, muted],
   );
 
   const handleKeyDown = useCallback(
@@ -364,7 +394,6 @@ export function AIBot() {
 
   const handleInputChange = useCallback((e) => setInput(e.target.value), []);
 
-  // FIX 1: Speak handler with stop callback passed down to BotMessage
   const handleSpeak = useCallback((text, onDone) => {
     window.speechSynthesis?.cancel();
     import("../audio/engine").then(({ speakWithCallbacks }) => {
@@ -379,29 +408,67 @@ export function AIBot() {
 
   return (
     <>
-      <LoggerToast visible={toast.visible} question={toast.question} />
-
       {open && (
         <div className="bot-panel">
           <BotHeader onClose={handleToggle} />
 
-          {/* FIX 2: ref on container for manual scroll control */}
           <div className="bot-msgs" ref={msgsContainerRef}>
             {messages.map((msg, i) => (
               <BotMessage key={i} msg={msg} onSpeak={handleSpeak} />
             ))}
             {loading && <TypingIndicator />}
-            <div ref={lastBotMsgRef} />
           </div>
 
-          {showQuickPrompts && <QuickPrompts onSelect={handleSend} />}
+          {showQuickPrompts && !awaitingContact && (
+            <QuickPrompts onSelect={handleSend} />
+          )}
+
+          {/* Contact-awaiting hint */}
+          {awaitingContact && (
+            <div
+              style={{
+                padding: "8px 14px",
+                borderTop: "1px solid rgba(0,212,255,.15)",
+                background: "rgba(0,212,255,.04)",
+                flexShrink: 0,
+                display: "flex",
+                alignItems: "center",
+                gap: 7,
+              }}
+            >
+              <span
+                style={{
+                  width: 6,
+                  height: 6,
+                  borderRadius: "50%",
+                  background: "var(--cyan)",
+                  boxShadow: "0 0 6px var(--cyan)",
+                  animation: "pulse-g 2s infinite",
+                  flexShrink: 0,
+                }}
+              />
+              <span
+                style={{
+                  fontFamily: "'Share Tech Mono',monospace",
+                  fontSize: 9,
+                  color: "var(--cyan)",
+                  letterSpacing: 1,
+                }}
+              >
+                AWAITING CONTACT INFO
+              </span>
+            </div>
+          )}
 
           <div className="bot-input-row">
-            {/* FIX 3: font-size:16px prevents iOS zoom on input focus */}
             <input
               ref={inputRef}
               className="bot-input"
-              placeholder="Ask something about Nikunj..."
+              placeholder={
+                awaitingContact
+                  ? "Enter your email or phone..."
+                  : "Ask something about Nikunj..."
+              }
               value={input}
               onChange={handleInputChange}
               onKeyDown={handleKeyDown}

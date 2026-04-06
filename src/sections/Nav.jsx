@@ -1,4 +1,4 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback, useEffect, useState } from 'react';
 import { sfxBtn, sfxClick } from '../audio/engine';
 import { useSound } from '../audio/SoundContext';
 import { useScrolled } from '../hooks';
@@ -49,27 +49,35 @@ const SoundToggle = memo(function SoundToggle({ muted, onToggle }) {
 });
 
 // ─── Nav link ─────────────────────────────────────────────────────────────────
-const NavLink = memo(function NavLink({ label, href, download = false }) {
+const NavLink = memo(function NavLink({ label, href, download = false, isActive = false }) {
   return (
     <a
       href={href}
       download={download || undefined}
       onMouseEnter={sfxBtn}
+      className={isActive ? 'nav-link-active' : ''}
       style={{
         fontFamily: "'Share Tech Mono',monospace",
-        fontSize: 11, color: 'var(--muted-bright)',
-        textDecoration: 'none', letterSpacing: 1.5,
-        transition: 'color 0.2s',
+        fontSize: 11,
+        color: isActive ? 'var(--white)' : 'var(--muted-bright)',
+        textDecoration: 'none',
+        letterSpacing: 1.5,
+        transition: 'color 0.2s, text-shadow 0.2s',
         position: 'relative',
         whiteSpace: 'nowrap',
+        textShadow: isActive ? '0 0 14px rgba(255,70,85,0.8)' : 'none',
       }}
       onMouseOver={e => {
-        e.currentTarget.style.color = 'var(--white)';
-        e.currentTarget.style.textShadow = '0 0 12px var(--red)';
+        if (!isActive) {
+          e.currentTarget.style.color = 'var(--white)';
+          e.currentTarget.style.textShadow = '0 0 12px var(--red)';
+        }
       }}
       onMouseOut={e => {
-        e.currentTarget.style.color = 'var(--muted-bright)';
-        e.currentTarget.style.textShadow = 'none';
+        if (!isActive) {
+          e.currentTarget.style.color = 'var(--muted-bright)';
+          e.currentTarget.style.textShadow = 'none';
+        }
       }}
     >
       {label}
@@ -91,12 +99,11 @@ const MobileMenu = memo(function MobileMenu({ isOpen, onClose, muted, onToggleSo
         display: 'flex', flexDirection: 'column',
         padding: '32px 24px',
         gap: 0,
-        animation: 'revealUp 0.25s ease',
+        animation: 'menuWipe 0.3s cubic-bezier(0.22, 0.68, 0, 1.05) forwards',
         borderTop: '1px solid rgba(255,70,85,0.2)',
       }}
       onClick={onClose}
     >
-      {/* Nav links */}
       {[...NAV_LINKS, { label: 'AGENT FILE', href: '/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf', download: true }].map(({ label, href, download }, i) => (
         <a
           key={label}
@@ -107,21 +114,23 @@ const MobileMenu = memo(function MobileMenu({ isOpen, onClose, muted, onToggleSo
             fontFamily: "'Share Tech Mono',monospace",
             fontSize: 14, color: 'var(--text-primary)',
             textDecoration: 'none', letterSpacing: 2,
-            padding: '16px 0',
+            padding: '18px 0',
             borderBottom: '1px solid rgba(42,58,80,0.3)',
             display: 'flex', alignItems: 'center', gap: 14,
-            animationDelay: `${i * 50}ms`,
+            opacity: 0,
+            animation: `revealUp 0.3s cubic-bezier(0.22,0.68,0,1.05) ${i * 60}ms forwards`,
           }}
         >
-          <span style={{ color: 'var(--red)', fontSize: 9 }}>▸</span>
+          <span style={{ color: 'var(--red)', fontSize: 10 }}>▸</span>
           {label}
         </a>
       ))}
 
-      {/* Bottom row */}
       <div style={{
-        marginTop: 'auto', paddingTop: 24,
+        marginTop: 'auto', paddingTop: 28,
         display: 'flex', gap: 12, alignItems: 'center',
+        opacity: 0,
+        animation: 'revealUp 0.3s cubic-bezier(0.22,0.68,0,1.05) 320ms forwards',
       }}>
         <a
           href="#contact"
@@ -142,6 +151,28 @@ export const Nav = memo(function Nav({ scrollProgress }) {
   const scrolled = useScrolled(20);
   const { muted, toggle } = useSound();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('');
+
+  // Track which section is in viewport
+  useEffect(() => {
+    const ids = NAV_LINKS.map(l => l.href.slice(1));
+    const observers = [];
+
+    ids.forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const obs = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) setActiveSection(id);
+        },
+        { threshold: 0.25, rootMargin: '-60px 0px -30% 0px' }
+      );
+      obs.observe(el);
+      observers.push(obs);
+    });
+
+    return () => observers.forEach(obs => obs.disconnect());
+  }, []);
 
   const handleToggleSound = useCallback(() => {
     sfxClick();
@@ -157,7 +188,7 @@ export const Nav = memo(function Nav({ scrollProgress }) {
     <>
       {/* Scroll progress bar */}
       <div style={{
-        position: 'fixed', top: 0, left: 0, height: 2,
+        position: 'fixed', top: 0, left: 0, height: 3,
         background: 'linear-gradient(90deg, var(--red), var(--cyan))',
         boxShadow: '0 0 10px var(--cyan)',
         zIndex: 9999,
@@ -169,26 +200,34 @@ export const Nav = memo(function Nav({ scrollProgress }) {
       <nav
         className="nav-inner"
         style={{
-          background: scrolled ? 'rgba(7,13,22,0.92)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(16px)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,70,85,0.2)' : '1px solid transparent',
+          background: scrolled ? 'rgba(7,13,22,0.95)' : 'transparent',
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
+          borderBottom: scrolled
+            ? '1px solid rgba(255,70,85,0.2)'
+            : '1px solid transparent',
+          boxShadow: scrolled ? '0 1px 0 rgba(255,70,85,0.08), 0 4px 20px rgba(0,0,0,0.3)' : 'none',
           transition: 'all 0.3s',
         }}
       >
         {/* Logo mark */}
-        <div style={{
-          width: 34, height: 34,
-          background: 'var(--red)',
-          flexShrink: 0,
-          clipPath: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontFamily: "'Rajdhani',sans-serif",
-          fontWeight: 700, fontSize: 13, color: '#fff',
-          boxShadow: '0 0 16px rgba(255,70,85,0.4)',
-        }}>
-          NP
-        </div>
+        <a href="#" style={{ textDecoration: 'none', flexShrink: 0 }}>
+          <div style={{
+            width: 34, height: 34,
+            background: 'var(--red)',
+            clipPath: 'polygon(50% 0, 100% 50%, 50% 100%, 0 50%)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontFamily: "'Rajdhani',sans-serif",
+            fontWeight: 700, fontSize: 13, color: '#fff',
+            boxShadow: '0 0 16px rgba(255,70,85,0.4)',
+            transition: 'box-shadow 0.2s',
+          }}
+          onMouseEnter={e => e.currentTarget.style.boxShadow = '0 0 28px rgba(255,70,85,0.7)'}
+          onMouseLeave={e => e.currentTarget.style.boxShadow = '0 0 16px rgba(255,70,85,0.4)'}
+          >
+            NP
+          </div>
+        </a>
 
         {/* Name + role */}
         <div style={{ flex: 1, minWidth: 0 }}>
@@ -209,15 +248,14 @@ export const Nav = memo(function Nav({ scrollProgress }) {
         </div>
 
         {/* Desktop nav links */}
-        <div
-          className="nav-links"
-          style={{
-            display: 'flex', gap: 24,
-            alignItems: 'center',
-          }}
-        >
+        <div className="nav-links" style={{ display: 'flex', gap: 24, alignItems: 'center' }}>
           {NAV_LINKS.map(({ label, href }) => (
-            <NavLink key={label} label={label} href={href} />
+            <NavLink
+              key={label}
+              label={label}
+              href={href}
+              isActive={activeSection === href.slice(1)}
+            />
           ))}
           <NavLink
             label="AGENT FILE"
@@ -248,18 +286,22 @@ export const Nav = memo(function Nav({ scrollProgress }) {
             justifyContent: 'center',
             clipPath: 'var(--clip-sm)',
             flexShrink: 0,
+            transition: 'background 0.2s',
           }}
+          onMouseEnter={e => e.currentTarget.style.background = 'rgba(255,70,85,0.08)'}
+          onMouseLeave={e => e.currentTarget.style.background = 'none'}
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+          <svg width="16" height="14" viewBox="0 0 16 14" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
             {menuOpen ? (
               <>
-                <line x1="18" y1="6" x2="6" y2="18" />
-                <line x1="6" y1="6" x2="18" y2="18" />
+                <line x1="1" y1="1" x2="15" y2="13" />
+                <line x1="15" y1="1" x2="1" y2="13" />
               </>
             ) : (
               <>
-                <line x1="4" y1="8" x2="20" y2="8" />
-                <line x1="4" y1="16" x2="20" y2="16" />
+                <line x1="1" y1="2"  x2="15" y2="2"  />
+                <line x1="1" y1="7"  x2="15" y2="7"  />
+                <line x1="1" y1="12" x2="15" y2="12" />
               </>
             )}
           </svg>
@@ -273,14 +315,6 @@ export const Nav = memo(function Nav({ scrollProgress }) {
         muted={muted}
         onToggleSound={handleToggleSound}
       />
-
-      {/* Mobile hamburger show rule */}
-      <style>{`
-        @media (max-width: 768px) {
-          .mobile-menu-btn { display: flex !important; }
-          .nav-links { display: none !important; }
-        }
-      `}</style>
     </>
   );
 });

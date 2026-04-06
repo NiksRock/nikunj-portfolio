@@ -5,7 +5,7 @@ import { useSound } from '../audio/SoundContext';
 
 // ─── Brackets ─────────────────────────────────────────────────────────────────
 export function Brackets({ color = 'var(--red)' }) {
-  const base = { position: 'absolute', width: 13, height: 13, zIndex: 10, borderColor: color };
+  const base = { position: 'absolute', width: 13, height: 13, zIndex: 10, borderColor: color, transition: 'width 0.2s ease, height 0.2s ease' };
   const corners = {
     tl: { ...base, top: 0,    left: 0,   borderTop: '2px solid', borderLeft: '2px solid' },
     tr: { ...base, top: 0,    right: 0,  borderTop: '2px solid', borderRight: '2px solid' },
@@ -14,10 +14,10 @@ export function Brackets({ color = 'var(--red)' }) {
   };
   return (
     <>
-      <span style={corners.tl} />
-      <span style={corners.tr} />
-      <span style={corners.bl} />
-      <span style={corners.br} />
+      <span className="bc" style={corners.tl} />
+      <span className="bc" style={corners.tr} />
+      <span className="bc" style={corners.bl} />
+      <span className="bc" style={corners.br} />
     </>
   );
 }
@@ -37,6 +37,11 @@ export function MagBtn({ children, variant = 'red', onClick, href, target, rel, 
   const ref = useRef(null);
   const Tag = href ? 'a' : 'button';
 
+  const handleMouseEnter = (e) => {
+    sfxBtn(e);
+    if (ref.current) ref.current.style.transition = 'none'; // Instant tracking on enter
+  };
+
   const handleMouseMove = (e) => {
     const rect = ref.current.getBoundingClientRect();
     ref.current.style.transform = `translate(
@@ -45,13 +50,20 @@ export function MagBtn({ children, variant = 'red', onClick, href, target, rel, 
     )`;
   };
 
+  const handleMouseLeave = () => {
+    if (ref.current) {
+      ref.current.style.transition = 'transform 0.45s cubic-bezier(0.22,0.68,0,1.1)';
+      ref.current.style.transform = '';
+    }
+  };
+
   return (
     <Tag
       ref={ref}
       className={`btn btn-${variant}`}
-      onMouseEnter={sfxBtn}
+      onMouseEnter={handleMouseEnter}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => { ref.current.style.transform = ''; }}
+      onMouseLeave={handleMouseLeave}
       onClick={(e) => { sfxClick(); onClick?.(e); }}
       href={href}
       target={target}
@@ -87,7 +99,7 @@ export function SkillBar({ label, level, delay = 0 }) {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 6,
+        marginBottom: 7,
       }}>
         <span style={{
           fontFamily: "'Share Tech Mono',monospace",
@@ -105,31 +117,31 @@ export function SkillBar({ label, level, delay = 0 }) {
         </span>
       </div>
       <div style={{
-        height: 3,
-        background: 'rgba(42,58,80,0.4)',
+        height: 4,
+        background: 'rgba(42,58,80,0.75)',
         borderRadius: 2,
         overflow: 'hidden',
       }}>
-        <div ref={barRef} className="sk-bar" />
+        <div ref={barRef} className="sk-bar" style={{ borderRadius: 0 }} />
       </div>
     </div>
   );
 }
 
 // ─── SectionHead ──────────────────────────────────────────────────────────────
-export function SectionHead({ sub, title }) {
+export function SectionHead({ sub, title, color = 'var(--red)' }) {
   return (
     <Reveal>
       {/* Sub label */}
       <div style={{
         fontFamily: "'Share Tech Mono',monospace",
-        fontSize: 11, color: 'var(--red)',
+        fontSize: 11, color,
         letterSpacing: 3, marginBottom: 10,
         display: 'flex', alignItems: 'center', gap: 10,
       }}>
         <span style={{
           display: 'inline-block', width: 3, height: 16,
-          background: 'var(--red)',
+          background: color,
         }} />
         {sub}
       </div>
@@ -141,16 +153,16 @@ export function SectionHead({ sub, title }) {
       }}>
         <div style={{
           height: 1, flex: 1,
-          background: 'linear-gradient(90deg,var(--red),transparent)',
+          background: `linear-gradient(90deg,${color},transparent)`,
         }} />
         <div style={{
           width: 5, height: 5,
-          background: 'var(--red)',
+          background: color,
           transform: 'rotate(45deg)',
         }} />
         <div style={{
           height: 1, width: 36,
-          background: 'rgba(255,70,85,0.25)',
+          background: `${color}44`,
         }} />
       </div>
 
@@ -158,11 +170,11 @@ export function SectionHead({ sub, title }) {
       <div style={{
         fontFamily: "'Rajdhani',sans-serif",
         fontWeight: 700,
-        fontSize: 'clamp(36px,4vw,52px)',
+        fontSize: 'clamp(34px,4vw,52px)',
         color: 'var(--white)',
         lineHeight: 1,
         marginBottom: 52,
-        letterSpacing: '-0.5px',
+        letterSpacing: '-1px',
       }}>
         {title}
       </div>
