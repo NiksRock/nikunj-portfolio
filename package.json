@@ -1,8 +1,10 @@
 {
   "name": "nikunj-portfolio",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "Personal portfolio for Nikunj Patel featuring React, Vite, a custom AI chatbot, and Web Audio interactions.",
   "type": "module",
+  "homepage": "https://nikunj.life",
   "scripts": {
     "dev": "vite",
     "build": "vite build",

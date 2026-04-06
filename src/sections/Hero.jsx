@@ -113,11 +113,11 @@ function HeroCard() {
           fontFamily: "'Rajdhani',sans-serif",
           fontWeight: 700, fontSize: 22, color: 'var(--gold)',
           lineHeight: 1,
-        }}>600K</div>
+        }}>5M+</div>
         <div style={{
           fontFamily: "'Share Tech Mono',monospace",
           fontSize: 9, color: 'var(--muted-bright)',
-        }}>USERS</div>
+        }}>MONTHLY</div>
       </div>
     </div>
   );
@@ -237,9 +237,9 @@ export function Hero() {
             marginBottom: 32, fontSize: 15.5,
             display: 'block',
           }}>
-            Senior Frontend Engineer with 7 years architecting scalable, enterprise-grade web platforms.
-            Specialist in micro-frontend architecture with Webpack Module Federation, React and Next.js ecosystems,
-            and cloud-native frontend delivery on AWS.
+            Senior Frontend Engineer with 7 years of experience building workflow UIs, shared component ecosystems,
+            and micro-frontend platforms across insurance, healthcare, and e-commerce. Core stack: React, TypeScript,
+            Next.js, and Webpack Module Federation.
           </SpeakText>
         </Reveal>
 

@@ -1,7 +1,6 @@
 # Nikunj Patel — Portfolio
 
-Production-grade React portfolio with a tactical HUD aesthetic, Web Audio API sounds,
-Web Speech API voice, scroll-triggered animations, and a zero-dependency AI chatbot.
+Production-ready React portfolio with HUD-inspired motion, Web Audio API interaction cues, Web Speech API voice support, and an integrated AI chatbot driven by a static response base.
 
 ---
 
@@ -14,73 +13,34 @@ src/
 │   └── SoundContext.jsx   # React context for mute state
 │
 ├── components/
-│   ├── primitives.jsx     # Reusable UI atoms: Brackets, Reveal, MagBtn,
-│   │                      #   Typewriter, SkillBar, SectionHead, SpeakText
+│   ├── primitives.jsx     # Reusable UI atoms: Reveal, SkillBar, SectionHead, SpeakText
 │   ├── StarField.jsx      # Animated starfield background
-│   ├── AIBot.jsx          # Chat widget (no API — keyword matcher)
-│   └── botMatcher.js      # Keyword scoring logic for bot responses
+│   ├── AIBot.jsx          # Chat widget with keyword-based responses
+│   └── botMatcher.js      # Keyword scoring logic for bot replies
 │
 ├── data/
-│   └── index.js           # All static content: skills, experience,
-│                          #   projects, bot KB, nav links, hero stats
+│   └── index.js           # Static content: skills, experience, projects, chatbot knowledge
 │
-├── hooks/
-│   └── index.js           # useReveal, useScrollProgress, useScrolled,
-│                          #   useTypewriter, useSkillBarReveal
-│
+├── hooks.js              # Custom hooks: scroll progress, reveal animations, typewriter, skill bar animation
 ├── sections/
-│   ├── Nav.jsx            # Fixed navigation + scroll progress bar
-│   ├── Hero.jsx           # Hero section with glitch name + card
-│   ├── Skills.jsx         # Skill cards + animated bars + stats
-│   ├── Experience.jsx     # Accordion timeline + education
-│   ├── Projects.jsx       # Project grid + detail modal
-│   └── Contact.jsx        # Contact section + footer
+│   ├── Nav.jsx            # Navigation and scroll progress UI
+│   ├── Hero.jsx           # Hero landing section with role summary and CTA buttons
+│   ├── Skills.jsx         # Skill cards, animated progress, and deployment stats
+│   ├── Experience.jsx     # Experience timeline, education, and achievements
+│   ├── Projects.jsx       # Project archive with metrics and highlights
+│   └── Contact.jsx        # Contact form and social links
 │
 ├── styles/
-│   └── global.js          # CSS variables, keyframes, utility classes
-│
-└── Portfolio.jsx          # Root component — assembles everything
+│   └── global.css         # Global theme and component styles
+├── App.jsx                # Root application component
+└── main.jsx               # React DOM mount point
 ```
 
 ---
 
-## Key design decisions
+## Design notes
 
-| Concern              | Approach |
-|----------------------|----------|
-| Audio               | Single `engine.js` module — all oscillators/noise/speech centralized |
-| Mute state          | React Context so any component can read/toggle without prop drilling |
-| Scroll state        | Two hooks: `useScrollProgress` (progress bar) and `useScrolled` (nav bg) |
-| Reveal animations   | `useReveal` IntersectionObserver — fires once, then disconnects |
-| Skill bar animation | `useSkillBarReveal` — same pattern, drives CSS width transition |
-| Typewriter          | `useTypewriter` — self-contained with configurable speeds |
-| Bot                 | `botMatcher.js` pure function — zero dependencies, easily unit-tested |
-| All static data     | `data/index.js` — single source of truth, no data scattered in components |
-| Styles              | Single `global.js` string — avoids styled-components overhead for a static site |
-
----
-
-## Bot: adding new knowledge
-
-Open `src/data/index.js` and add a new entry to `BOT_KNOWLEDGE_BASE`:
-
-```js
-myNewTopic: {
-  keywords: ['keyword one', 'keyword two'],
-  responses: [
-    'Response variant A',
-    'Response variant B — randomly selected',
-  ],
-},
-```
-
-The matcher scores by keyword length (multi-word keywords rank higher).
-
----
-
-## Audio
-
-All sounds are one-shot synth bursts via Web Audio API — no audio files, no network requests.
-Speech uses the browser's built-in Web Speech API and prefers a robotic-sounding voice.
-
-Sounds play only on user interaction. No ambient or autoplay audio.
+- Static portfolio content is centralized in `src/data/index.js`.
+- The chatbot operates locally with no backend dependency.
+- Sections are lazy-loaded to improve initial load performance.
+- All audio effects are generated with native browser APIs.

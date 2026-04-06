@@ -96,8 +96,8 @@ export function Contact() {
             <MagBtn variant="cyan" href="https://github.com/NiksRock" target="_blank" rel="noopener noreferrer">
               GitHub // NiksRock
             </MagBtn>
-            <MagBtn variant="ghost" href="https://linkedin.com/in/nikunj-patel-1aa949156" target="_blank" rel="noopener noreferrer">
-              LinkedIn Profile
+            <MagBtn variant="ghost" href="https://linkedin.com/in/nikunj-patel-dev" target="_blank" rel="noopener noreferrer">
+              LinkedIn // nikunj-patel-dev
             </MagBtn>
             <a
               href="/Nikunj_Patel_Senior_Frontend_Engineer_2026.pdf"
@@ -125,7 +125,7 @@ export function Contact() {
                 fontSize: 9, color: 'var(--muted-bright)',
                 letterSpacing: 2,
               }}>
-                NP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
+                NKP // SDE-3 // STAR HEALTH &amp; ALLIED INSURANCE // PUNE
               </div>
               <div style={{ flex: 1, height: 1, background: 'linear-gradient(90deg,var(--red),transparent)' }} />
             </div>
@@ -134,7 +134,7 @@ export function Contact() {
               fontSize: 9, color: 'rgba(42,58,80,0.6)',
               letterSpacing: 1,
             }}>
-              &copy; 2025 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
+              &copy; 2026 NIKUNJ PATEL &mdash; ALL RIGHTS RESERVED // DEPLOYED IN PRODUCTION
             </div>
           </div>
         </Reveal>
