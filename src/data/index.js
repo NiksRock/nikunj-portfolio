@@ -447,10 +447,10 @@ export const BOT_KNOWLEDGE_BASE = {
 
   // ── Website ───────────────────────────────────────────────────────────────
   website: {
-    keywords: ["website", "portfolio", "nikunj.life", "url", "link", "site"],
+    keywords: ["website", "portfolio", "nikunjpatel.website", "url", "link", "site"],
     responses: [
-      "You're already on it! nikunj.life is his portfolio — built with React, Vite, and a custom audio engine. The full experience is right here.",
-      "This is the portfolio — nikunj.life. Built with React + Vite. You can scroll through his skills, experience, and projects, or just keep asking me things.",
+      "You're already on it! nikunjpatel.website is his portfolio — built with React, Vite, and a custom audio engine. The full experience is right here.",
+      "This is the portfolio — nikunjpatel.website. Built with React + Vite. You can scroll through his skills, experience, and projects, or just keep asking me things.",
     ],
   },
 
@@ -505,9 +505,9 @@ export const BOT_KNOWLEDGE_BASE = {
   ],
   responses: [
     "Nikunj is open to discussing compensation depending on the role, scope, and team. For the right senior frontend or architecture role, he's happy to align with market standards.",
-    
+
     "Compensation is flexible and depends on the role and responsibilities. For senior frontend architecture roles, he's open to discussing competitive market packages.",
-    
+
     "He's open to discussing salary based on the opportunity, team, and impact of the role. Best approach is to connect with him directly to discuss details."
   ]
 },
